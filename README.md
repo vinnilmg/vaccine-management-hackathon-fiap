@@ -1,1 +1,1 @@
-# vaccine-management-hackathon-fiap
+# vaccine-management-hackathon-fiapp
