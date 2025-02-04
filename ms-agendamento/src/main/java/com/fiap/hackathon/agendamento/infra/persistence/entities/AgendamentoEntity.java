@@ -11,6 +11,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @Table(name = "agendamentos")
@@ -18,6 +20,9 @@ public class AgendamentoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    private LocalDateTime dataHoraAgendamento;
 
     @NotNull
     @Enumerated(EnumType.STRING)
