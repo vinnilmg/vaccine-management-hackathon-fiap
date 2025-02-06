@@ -5,6 +5,6 @@ import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
 import java.util.List;
 
 @FunctionalInterface
-public interface BuscarTodosAgendamentosUseCase {
-    List<Agendamento> execute();
+public interface BuscarPorPostoVacinacaoUseCase {
+    List<Agendamento> execute(Long postoVacinacaoId);
 }

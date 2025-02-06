@@ -1,22 +1,23 @@
 package com.fiap.hackathon.agendamento.application.usecases.impl;
 
+import com.fiap.hackathon.agendamento.application.gateway.FindAllAgendamentosGateway;
 import com.fiap.hackathon.agendamento.application.usecases.BuscarTodosAgendamentosUseCase;
-import com.fiap.hackathon.agendamento.infra.persistence.entities.AgendamentoEntity;
-import com.fiap.hackathon.agendamento.infra.persistence.repositories.AgendamentoRepository;
+import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
+import com.fiap.hackathon.agendamento.infra.gateways.FindAllAgendamentosDatabaseGateway;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BuscarTodosAgendamentosUseCaseImpl implements BuscarTodosAgendamentosUseCase {
-    private final AgendamentoRepository agendamentoRepository;
+    private final FindAllAgendamentosGateway findAllAgendamentosGateway;
 
-    public BuscarTodosAgendamentosUseCaseImpl(AgendamentoRepository agendamentoRepository) {
-        this.agendamentoRepository = agendamentoRepository;
+    public BuscarTodosAgendamentosUseCaseImpl(FindAllAgendamentosDatabaseGateway findAllAgendamentos) {
+        this.findAllAgendamentosGateway = findAllAgendamentos;
     }
 
     @Override
-    public List<AgendamentoEntity> execute() {
-        return agendamentoRepository.findAll();
+    public List<Agendamento> execute() {
+        return findAllAgendamentosGateway.find();
     }
 }
