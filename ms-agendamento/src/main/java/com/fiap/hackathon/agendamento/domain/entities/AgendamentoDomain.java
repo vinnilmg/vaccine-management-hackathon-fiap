@@ -1,9 +1,13 @@
 package com.fiap.hackathon.agendamento.domain.entities;
 
+import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationException;
 import com.fiap.hackathon.agendamento.infra.persistence.entities.enums.StatusAgendamento;
 
 import java.time.LocalDateTime;
 
+import static com.fiap.hackathon.agendamento.infra.persistence.entities.enums.StatusAgendamento.CANCELADO;
+import static com.fiap.hackathon.agendamento.infra.persistence.entities.enums.StatusAgendamento.FINALIZADO;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Objects.requireNonNull;
 
 public class AgendamentoDomain implements Agendamento {
@@ -11,8 +15,8 @@ public class AgendamentoDomain implements Agendamento {
     private final Long usuarioId;
     private final Long postoVacinacaoId;
     private final Long vacinaId;
-    private final StatusAgendamento status;
     private final LocalDateTime dataHoraAgendamento;
+    private StatusAgendamento status;
 
     public AgendamentoDomain(
             final Long id,
@@ -56,8 +60,19 @@ public class AgendamentoDomain implements Agendamento {
     }
 
     @Override
+    public StatusAgendamento getStatusEnum() {
+        return status;
+    }
+
+    @Override
     public String getData() {
         return dataHoraAgendamento.toLocalDate().toString();
+    }
+
+    @Override
+    public String getDataFormatada() {
+        return dataHoraAgendamento.toLocalDate()
+                .format(ofPattern("dd/MM/yyyy"));
     }
 
     @Override
@@ -68,5 +83,31 @@ public class AgendamentoDomain implements Agendamento {
     @Override
     public String getDataHora() {
         return dataHoraAgendamento.toString();
+    }
+
+    @Override
+    public void cancelar() {
+        switch (status) {
+            case CANCELADO:
+                throw CustomValidationException.ofAgendamento("already canceled");
+            case FINALIZADO:
+                throw CustomValidationException.ofAgendamento("is finished, so cannot be canceled");
+            case CONFIRMADO:
+                status = CANCELADO;
+                break;
+        }
+    }
+
+    @Override
+    public void finalizar() {
+        switch (status) {
+            case CANCELADO:
+                throw CustomValidationException.ofAgendamento("is canceled, so cannot be finished");
+            case FINALIZADO:
+                throw CustomValidationException.ofAgendamento("already finished");
+            case CONFIRMADO:
+                status = FINALIZADO;
+                break;
+        }
     }
 }

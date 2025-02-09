@@ -6,7 +6,6 @@ public record AgendamentoResponse(
     Long postoVacinacaoId,
     Long vacinaId,
     String data,
-    String hora,
-    String status
+    String hora
 ) {
 }

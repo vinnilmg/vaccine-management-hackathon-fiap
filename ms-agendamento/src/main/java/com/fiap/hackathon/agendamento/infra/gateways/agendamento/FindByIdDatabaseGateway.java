@@ -1,19 +1,19 @@
-package com.fiap.hackathon.agendamento.infra.gateways;
+package com.fiap.hackathon.agendamento.infra.gateways.agendamento;
 
-import com.fiap.hackathon.agendamento.application.gateway.FindByVacinaGateway;
+import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindByIdGateway;
 import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
 import com.fiap.hackathon.agendamento.infra.persistence.mappers.AgendamentoEntityMapper;
 import com.fiap.hackathon.agendamento.infra.persistence.repositories.AgendamentoRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
-public class FindByVacinaDatabaseGateway implements FindByVacinaGateway {
+public class FindByIdDatabaseGateway implements FindByIdGateway {
     private final AgendamentoRepository agendamentoRepository;
     private final AgendamentoEntityMapper agendamentoEntityMapper;
 
-    public FindByVacinaDatabaseGateway(
+    public FindByIdDatabaseGateway(
             AgendamentoRepository agendamentoRepository,
             AgendamentoEntityMapper agendamentoEntityMapper
     ) {
@@ -22,8 +22,8 @@ public class FindByVacinaDatabaseGateway implements FindByVacinaGateway {
     }
 
     @Override
-    public List<Agendamento> find(final Long vacinaId) {
-        final var agendamentos = agendamentoRepository.findByVacinaId(vacinaId);
-        return agendamentoEntityMapper.toAgendamentosDomain(agendamentos);
+    public Optional<Agendamento> find(final Long agendamentoId) {
+        return agendamentoRepository.findById(agendamentoId)
+                .map(agendamentoEntityMapper::toAgendamentoDomain);
     }
 }

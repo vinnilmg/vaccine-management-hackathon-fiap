@@ -27,4 +27,8 @@ public class CustomValidationException extends RuntimeException {
     public static CustomValidationException ofNullOrLessThanZero(final String field) {
         return of(field, "cannot be null or less than zero");
     }
+
+    public static CustomValidationException ofAgendamento(final String message) {
+        return of("Agendamento", message);
+    }
 }

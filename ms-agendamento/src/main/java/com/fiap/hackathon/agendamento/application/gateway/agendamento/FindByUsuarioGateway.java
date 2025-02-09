@@ -1,4 +1,4 @@
-package com.fiap.hackathon.agendamento.application.gateway;
+package com.fiap.hackathon.agendamento.application.gateway.agendamento;
 
 import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
 

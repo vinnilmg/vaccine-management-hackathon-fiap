@@ -23,7 +23,8 @@ public interface AgendamentoResponseMapper {
     @Mapping(target = "usuarioId", source = "usuarioId")
     @Mapping(target = "postoVacinacaoId", source = "postoVacinacaoId")
     @Mapping(target = "vacinaId", source = "vacinaId")
-    @Mapping(target = "data", source = "data")
+    @Mapping(target = "data", source = "dataFormatada")
     @Mapping(target = "hora", source = "hora")
+    @Mapping(target = "status", source = "status")
     AgendamentoResponse toResponse(Agendamento agendamento);
 }

@@ -1,9 +1,9 @@
 package com.fiap.hackathon.agendamento.application.usecases.impl;
 
-import com.fiap.hackathon.agendamento.application.gateway.FindByPostoVacinacaoGateway;
+import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindByPostoVacinacaoGateway;
 import com.fiap.hackathon.agendamento.application.usecases.BuscarPorPostoVacinacaoUseCase;
 import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
-import com.fiap.hackathon.agendamento.infra.gateways.FindByPostoVacinacaoDatabaseGateway;
+import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindByPostoVacinacaoDatabaseGateway;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

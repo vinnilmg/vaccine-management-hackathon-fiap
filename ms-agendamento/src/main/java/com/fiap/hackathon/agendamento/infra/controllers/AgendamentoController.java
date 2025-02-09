@@ -4,12 +4,16 @@ import com.fiap.hackathon.agendamento.application.usecases.BuscarPorPostoVacinac
 import com.fiap.hackathon.agendamento.application.usecases.BuscarPorUsuarioUseCase;
 import com.fiap.hackathon.agendamento.application.usecases.BuscarPorVacinaUseCase;
 import com.fiap.hackathon.agendamento.application.usecases.BuscarTodosAgendamentosUseCase;
+import com.fiap.hackathon.agendamento.application.usecases.CancelarAgendamentoUseCase;
 import com.fiap.hackathon.agendamento.application.usecases.CriarAgendamentoUseCase;
+import com.fiap.hackathon.agendamento.application.usecases.FinalizarAgendamentoUseCase;
 import com.fiap.hackathon.agendamento.application.usecases.impl.BuscarPorPostoVacinacaoUseCaseImpl;
 import com.fiap.hackathon.agendamento.application.usecases.impl.BuscarPorUsuarioUseCaseImpl;
 import com.fiap.hackathon.agendamento.application.usecases.impl.BuscarPorVacinaUseCaseImpl;
 import com.fiap.hackathon.agendamento.application.usecases.impl.BuscarTodosAgendamentosUseCaseImpl;
+import com.fiap.hackathon.agendamento.application.usecases.impl.CancelarAgendamentoUseCaseImpl;
 import com.fiap.hackathon.agendamento.application.usecases.impl.CriarAgendamentoUseCaseImpl;
+import com.fiap.hackathon.agendamento.application.usecases.impl.FinalizarAgendamentoUseCaseImpl;
 import com.fiap.hackathon.agendamento.infra.controllers.mappers.AgendamentoResponseMapper;
 import com.fiap.hackathon.agendamento.infra.controllers.request.AgendamentoRequest;
 import com.fiap.hackathon.agendamento.infra.controllers.response.AgendamentoResponse;
@@ -20,9 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/agendamentos")
@@ -32,6 +39,8 @@ public class AgendamentoController {
     private final BuscarPorUsuarioUseCase buscarPorUsuarioUseCase;
     private final BuscarPorVacinaUseCase buscarPorVacinaUseCase;
     private final CriarAgendamentoUseCase criarAgendamentoUseCase;
+    private final CancelarAgendamentoUseCase cancelarAgendamentoUseCase;
+    private final FinalizarAgendamentoUseCase finalizarAgendamentoUseCase;
     private final AgendamentoResponseMapper agendamentoResponseMapper;
 
     public AgendamentoController(
@@ -40,6 +49,8 @@ public class AgendamentoController {
             BuscarPorUsuarioUseCaseImpl buscarPorUsuarioUseCase,
             BuscarPorVacinaUseCaseImpl buscarPorVacinaUseCase,
             CriarAgendamentoUseCaseImpl criarAgendamentoUseCase,
+            CancelarAgendamentoUseCaseImpl cancelarAgendamentoUseCase,
+            FinalizarAgendamentoUseCaseImpl finalizarAgendamentoUseCase,
             AgendamentoResponseMapper agendamentoResponseMapper
     ) {
         this.buscarTodosAgendamentosUseCase = buscarTodosAgendamentosUseCase;
@@ -47,23 +58,27 @@ public class AgendamentoController {
         this.buscarPorUsuarioUseCase = buscarPorUsuarioUseCase;
         this.buscarPorVacinaUseCase = buscarPorVacinaUseCase;
         this.criarAgendamentoUseCase = criarAgendamentoUseCase;
+        this.cancelarAgendamentoUseCase = cancelarAgendamentoUseCase;
+        this.finalizarAgendamentoUseCase = finalizarAgendamentoUseCase;
         this.agendamentoResponseMapper = agendamentoResponseMapper;
     }
 
     @PostMapping
     public ResponseEntity<AgendamentoResponse> realizarAgendamento(@RequestBody final AgendamentoRequest request) {
-        final var agendamentoCriado = criarAgendamentoUseCase.execute(null);
+        final var agendamentoCriado = criarAgendamentoUseCase.execute(request);
         return ResponseEntity.ok(null);
     }
 
-    @PutMapping("/{agendamentoId}/concluir")
-    public ResponseEntity<Void> concluirAgendamento(@PathVariable final Long agendamentoId) {
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{agendamentoId}/finalizar")
+    @ResponseStatus(NO_CONTENT)
+    public void finalizarAgendamento(@PathVariable final Long agendamentoId) {
+        finalizarAgendamentoUseCase.execute(agendamentoId);
     }
 
     @PutMapping("/{agendamentoId}/cancelar")
-    public ResponseEntity<Void> cancelarAgendamento(@PathVariable final Long agendamentoId) {
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(NO_CONTENT)
+    public void cancelarAgendamento(@PathVariable final Long agendamentoId) {
+        cancelarAgendamentoUseCase.execute(agendamentoId);
     }
 
     @GetMapping("/usuario/{usuarioId}")
