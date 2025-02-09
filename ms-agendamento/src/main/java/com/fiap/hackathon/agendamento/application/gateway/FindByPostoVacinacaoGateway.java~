@@ -1,0 +1,10 @@
+package com.fiap.hackathon.agendamento.application.gateway;
+
+import com.fiap.hackathon.agendamento.infra.persistence.entities.AgendamentoEntity;
+
+import java.util.List;
+
+@FunctionalInterface
+public interface FindByPostoVacinacaoGateway {
+    List<AgendamentoEntity> find(Long postoVacinacaoId);
+}
