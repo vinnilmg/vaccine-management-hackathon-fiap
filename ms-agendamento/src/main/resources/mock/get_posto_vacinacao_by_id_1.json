@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/posto-vacinacao/1"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": 1,
+      "nome": "UBS São Pedro",
+      "funcionamento": [
+        {
+          "dia": "segunda",
+          "horario": {
+            "inicio": "08:00",
+            "termino": "17:00"
+          }
+        },
+        {
+          "dia": "terca",
+          "horario": {
+            "inicio": "09:00",
+            "termino": "14:00"
+          }
+        },
+        {
+          "dia": "quarta",
+          "horario": {
+            "inicio": "08:00",
+            "termino": "17:00"
+          }
+        },
+        {
+          "dia": "quinta",
+          "horario": {
+            "inicio": "08:00",
+            "termino": "14:00"
+          }
+        },
+        {
+          "dia": "sexta",
+          "horario": {
+            "inicio": "08:00",
+            "termino": "12:00"
+          }
+        }
+      ]
+    }
+  }
+}
