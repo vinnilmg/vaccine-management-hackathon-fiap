@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/posto-vacinacao/1"
+    "url": "/postos/1/vacinas/2"
   },
   "response": {
     "status": 200,
@@ -11,6 +11,16 @@
     "jsonBody": {
       "id": 1,
       "nome": "UBS São Pedro",
+      "tipo": "UBS",
+      "endereco": {
+        "rua": "Rua 1",
+        "numero": "15",
+        "bairro": "Limão",
+        "complemento": "",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "02198050"
+      },
       "funcionamento": [
         {
           "dia": "segunda",
@@ -47,7 +57,18 @@
             "termino": "12:00"
           }
         }
-      ]
+      ],
+      "vacina": {
+        "id": 1,
+        "lotes": [
+          {
+            "id": 1,
+            "codigo": "164XX532",
+            "estoque": 100,
+            "validade": "31/12/2030"
+          }
+        ]
+      }
     }
   }
 }

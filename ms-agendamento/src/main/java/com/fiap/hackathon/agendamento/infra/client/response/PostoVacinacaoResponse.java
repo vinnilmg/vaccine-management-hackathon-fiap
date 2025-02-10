@@ -5,6 +5,8 @@ import java.util.List;
 public record PostoVacinacaoResponse(
     Long id,
     String nome,
-    List<FuncionamentoPostoResponse> funcionamento
+    String tipo,
+    List<FuncionamentoPostoResponse> funcionamento,
+    VacinaResponse vacina
 ) {
 }

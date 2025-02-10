@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(value = "posto-vacinacao", url = "${ms-postos-vacina.host}")
 public interface PostoVacinacaoClient {
 
-    @GetMapping(value = "/posto-vacinacao/{id}", produces = "application/json")
-    PostoVacinacaoResponse getPostoVacinacaoById(@PathVariable("id") Long id);
+    @GetMapping(value = "/postos/{postoVacinacaoId}/vacinas/{vacinaId}", produces = "application/json")
+    PostoVacinacaoResponse getPostoAndVacinaById(
+            @PathVariable Long postoVacinacaoId,
+            @PathVariable Long vacinaId
+    );
 }

@@ -27,4 +27,8 @@ public class NotFoundException extends RuntimeException {
     public static NotFoundException ofAgendamento() {
         return of("Agendamento");
     }
+
+    public static NotFoundException ofPostoVacinacao() {
+        return of("Posto de Vacinação");
+    }
 }

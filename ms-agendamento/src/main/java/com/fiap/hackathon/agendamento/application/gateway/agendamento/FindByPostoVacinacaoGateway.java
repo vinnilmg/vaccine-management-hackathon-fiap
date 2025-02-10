@@ -1,6 +1,6 @@
 package com.fiap.hackathon.agendamento.application.gateway.agendamento;
 
-import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
+import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
 
 import java.util.List;
 
