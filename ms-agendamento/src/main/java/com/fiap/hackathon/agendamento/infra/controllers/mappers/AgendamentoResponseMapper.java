@@ -1,6 +1,6 @@
 package com.fiap.hackathon.agendamento.infra.controllers.mappers;
 
-import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
+import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
 import com.fiap.hackathon.agendamento.infra.controllers.response.AgendamentoResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

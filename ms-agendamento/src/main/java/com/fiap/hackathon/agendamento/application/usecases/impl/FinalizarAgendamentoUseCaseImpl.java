@@ -4,7 +4,7 @@ import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindByIdGa
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.UpdateAgendamentoStatusGateway;
 import com.fiap.hackathon.agendamento.application.usecases.FinalizarAgendamentoUseCase;
 import com.fiap.hackathon.agendamento.domain.exceptions.NotFoundException;
-import com.fiap.hackathon.agendamento.infra.gateways.UpdateAgendamentoStatusDatabaseGateway;
+import com.fiap.hackathon.agendamento.infra.gateways.agendamento.UpdateAgendamentoStatusDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindByIdDatabaseGateway;
 import org.springframework.stereotype.Service;
 

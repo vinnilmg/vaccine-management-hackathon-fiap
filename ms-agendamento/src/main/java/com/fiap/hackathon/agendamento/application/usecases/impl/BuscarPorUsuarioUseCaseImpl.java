@@ -2,7 +2,7 @@ package com.fiap.hackathon.agendamento.application.usecases.impl;
 
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindByUsuarioGateway;
 import com.fiap.hackathon.agendamento.application.usecases.BuscarPorUsuarioUseCase;
-import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
+import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindByUsuarioDatabaseGateway;
 import org.springframework.stereotype.Service;
 

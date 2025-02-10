@@ -1,4 +1,4 @@
-package com.fiap.hackathon.agendamento.domain.entities;
+package com.fiap.hackathon.agendamento.domain.entities.agendamento;
 
 import com.fiap.hackathon.agendamento.infra.persistence.entities.enums.StatusAgendamento;
 

@@ -1,7 +1,7 @@
 package com.fiap.hackathon.agendamento.infra.persistence.mappers;
 
-import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
-import com.fiap.hackathon.agendamento.domain.entities.agendamento.AgendamentoDomain;
+import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
+import com.fiap.hackathon.agendamento.domain.entities.AgendamentoDomain;
 import com.fiap.hackathon.agendamento.infra.persistence.entities.AgendamentoEntity;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
