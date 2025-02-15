@@ -27,4 +27,11 @@ public interface AgendamentoEntityMapper {
     @Mapping(target = "status", source = "status")
     @Mapping(target = "dataHoraAgendamento", source = "dataHoraAgendamento")
     AgendamentoDomain toAgendamentoDomain(AgendamentoEntity agendamento);
+
+    @Mapping(target = "usuarioId", source = "usuarioId")
+    @Mapping(target = "postoVacinacaoId", source = "postoVacinacaoId")
+    @Mapping(target = "vacinaId", source = "vacinaId")
+    @Mapping(target = "status", source = "status")
+    @Mapping(target = "dataHoraAgendamento", source = "dataHora")
+    AgendamentoEntity toAgendamentoEntity(Agendamento agendamento);
 }

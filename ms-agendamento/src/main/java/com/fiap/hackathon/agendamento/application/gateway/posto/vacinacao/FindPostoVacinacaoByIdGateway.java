@@ -6,5 +6,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface FindPostoVacinacaoByIdGateway {
-    Optional<PostoVacinacao> find(Long postoVacinacaoId, Long vacinaId);
+    Optional<PostoVacinacao> find(Long id);
 }

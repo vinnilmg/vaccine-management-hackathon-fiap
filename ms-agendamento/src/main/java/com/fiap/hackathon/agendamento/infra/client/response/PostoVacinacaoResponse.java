@@ -6,7 +6,6 @@ public record PostoVacinacaoResponse(
     Long id,
     String nome,
     String tipo,
-    List<FuncionamentoPostoResponse> funcionamento,
-    VacinaResponse vacina
+    List<FuncionamentoPostoResponse> funcionamento
 ) {
 }

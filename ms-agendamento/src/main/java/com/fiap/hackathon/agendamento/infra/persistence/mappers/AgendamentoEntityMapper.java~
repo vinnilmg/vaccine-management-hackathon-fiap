@@ -1,7 +1,7 @@
 package com.fiap.hackathon.agendamento.infra.persistence.mappers;
 
-import com.fiap.hackathon.agendamento.domain.entities.Agendamento;
-import com.fiap.hackathon.agendamento.domain.entities.AgendamentoDomain;
+import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
+import com.fiap.hackathon.agendamento.domain.entities.agendamento.AgendamentoDomain;
 import com.fiap.hackathon.agendamento.infra.persistence.entities.AgendamentoEntity;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -27,4 +27,11 @@ public interface AgendamentoEntityMapper {
     @Mapping(target = "status", source = "status")
     @Mapping(target = "dataHoraAgendamento", source = "dataHoraAgendamento")
     AgendamentoDomain toAgendamentoDomain(AgendamentoEntity agendamento);
+
+    @Mapping(target = "usuarioId", source = "usuarioId")
+    @Mapping(target = "postoVacinacaoId", source = "postoVacinacaoId")
+    @Mapping(target = "vacinaId", source = "vacinaId")
+    @Mapping(target = "status", source = "status")
+    @Mapping(target = "dataHoraAgendamento", source = "getDataHora")
+    AgendamentoEntity toAgendamentoEntity(Agendamento agendamento);
 }

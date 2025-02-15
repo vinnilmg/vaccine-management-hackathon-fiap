@@ -11,12 +11,21 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Objects.requireNonNull;
 
 public class AgendamentoDomain implements Agendamento {
-    private final Long id;
+    private Long id;
     private final Long usuarioId;
     private final Long postoVacinacaoId;
     private final Long vacinaId;
     private final LocalDateTime dataHoraAgendamento;
     private StatusAgendamento status;
+
+    public static Agendamento ofNovoAgendamento(
+            final Long usuarioId,
+            final Long postoVacinacaoId,
+            final Long vacinaId,
+            final LocalDateTime dataHoraAgendamento
+    ) {
+        return new AgendamentoDomain(usuarioId, postoVacinacaoId, vacinaId, dataHoraAgendamento);
+    }
 
     public AgendamentoDomain(
             final Long id,
@@ -31,6 +40,19 @@ public class AgendamentoDomain implements Agendamento {
         this.postoVacinacaoId = requireNonNull(postoVacinacaoId, "Posto Vacinacao Id cannot be null");
         this.vacinaId = requireNonNull(vacinaId, "Vacina Id cannot be null");
         this.status = requireNonNull(status, "Status cannot be null");
+        this.dataHoraAgendamento = requireNonNull(dataHoraAgendamento, "Data Hora Agendamento cannot be null");
+    }
+
+    private AgendamentoDomain(
+            final Long usuarioId,
+            final Long postoVacinacaoId,
+            final Long vacinaId,
+            final LocalDateTime dataHoraAgendamento
+    ) {
+        this.usuarioId = requireNonNull(usuarioId, "Usuario Id cannot be null");
+        this.postoVacinacaoId = requireNonNull(postoVacinacaoId, "Posto Vacinacao Id cannot be null");
+        this.vacinaId = requireNonNull(vacinaId, "Vacina Id cannot be null");
+        this.status = StatusAgendamento.CONFIRMADO;
         this.dataHoraAgendamento = requireNonNull(dataHoraAgendamento, "Data Hora Agendamento cannot be null");
     }
 

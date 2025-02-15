@@ -6,7 +6,7 @@ import static java.text.MessageFormat.format;
 
 @Getter
 public class NotFoundException extends RuntimeException {
-    private static final String DEFAULT_MSG = "not found";
+    private static final String DEFAULT_MSG = "não existe";
 
     private final String resource;
 
@@ -30,5 +30,9 @@ public class NotFoundException extends RuntimeException {
 
     public static NotFoundException ofPostoVacinacao() {
         return of("Posto de Vacinação");
+    }
+
+    public static NotFoundException ofUsuario() {
+        return of("Usuário");
     }
 }
