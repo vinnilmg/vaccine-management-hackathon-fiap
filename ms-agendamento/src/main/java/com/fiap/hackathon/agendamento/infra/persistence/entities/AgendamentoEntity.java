@@ -9,11 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "agendamentos")
 public class AgendamentoEntity {
@@ -36,4 +34,52 @@ public class AgendamentoEntity {
 
     @NotNull
     private Long usuarioId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public @NotNull LocalDateTime getDataHoraAgendamento() {
+        return dataHoraAgendamento;
+    }
+
+    public void setDataHoraAgendamento(@NotNull LocalDateTime dataHoraAgendamento) {
+        this.dataHoraAgendamento = dataHoraAgendamento;
+    }
+
+    public @NotNull StatusAgendamento getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NotNull StatusAgendamento status) {
+        this.status = status;
+    }
+
+    public @NotNull Long getPostoVacinacaoId() {
+        return postoVacinacaoId;
+    }
+
+    public void setPostoVacinacaoId(@NotNull Long postoVacinacaoId) {
+        this.postoVacinacaoId = postoVacinacaoId;
+    }
+
+    public @NotNull Long getVacinaId() {
+        return vacinaId;
+    }
+
+    public void setVacinaId(@NotNull Long vacinaId) {
+        this.vacinaId = vacinaId;
+    }
+
+    public @NotNull Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(@NotNull Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 }

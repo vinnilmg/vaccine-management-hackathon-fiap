@@ -69,7 +69,7 @@ public class AgendamentoController {
             @Valid @RequestBody final AgendamentoRequest request
     ) {
         final var agendamentoCriado = criarAgendamentoUseCase.execute(request);
-        return ResponseEntity.ok(agendamentoResponseMapper.toResponse(agendamentoCriado));
+        return ResponseEntity.ok(null);
     }
 
     @PutMapping("/{agendamentoId}/finalizar")

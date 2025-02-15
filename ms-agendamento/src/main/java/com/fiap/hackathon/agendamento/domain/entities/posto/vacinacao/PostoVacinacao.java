@@ -1,8 +1,8 @@
 package com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao;
 
 import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.funcionamento.Funcionamento;
-import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.vacina.Vacina;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostoVacinacao {
@@ -12,5 +12,9 @@ public interface PostoVacinacao {
 
     List<Funcionamento> getFuncionamento();
 
-    Vacina getVacina();
+    // Vacina getVacina();
+
+    boolean isOpen(LocalDateTime dataHoraAgendamento);
+
+    boolean isClosed(LocalDateTime dataHoraAgendamento);
 }

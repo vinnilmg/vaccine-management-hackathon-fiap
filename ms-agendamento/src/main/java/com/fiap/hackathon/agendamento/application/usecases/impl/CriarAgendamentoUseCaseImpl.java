@@ -1,47 +1,64 @@
 package com.fiap.hackathon.agendamento.application.usecases.impl;
 
+import com.fiap.hackathon.agendamento.application.gateway.agendamento.CreateAgendamentoGateway;
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindConfirmedByUsuarioAndVacinaGateway;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindPostoVacinacaoByIdGateway;
+import com.fiap.hackathon.agendamento.application.gateway.usuario.FindUsuarioByIdGateway;
 import com.fiap.hackathon.agendamento.application.usecases.CriarAgendamentoUseCase;
 import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
 import com.fiap.hackathon.agendamento.domain.exceptions.AgendamentoAlreayExistsException;
+import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationException;
 import com.fiap.hackathon.agendamento.domain.exceptions.NotFoundException;
+import com.fiap.hackathon.agendamento.infra.controllers.mappers.AgendamentoRequestMapper;
 import com.fiap.hackathon.agendamento.infra.controllers.request.AgendamentoRequest;
+import com.fiap.hackathon.agendamento.infra.gateways.agendamento.CreateAgendamentoDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindConfirmedByUsuarioAndVacinaDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.FindPostoVacinacaoByIdProviderGateway;
+import com.fiap.hackathon.agendamento.infra.gateways.usuario.FindUsuarioByIdProviderGateway;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
     private final FindConfirmedByUsuarioAndVacinaGateway findConfirmedByUsuarioAndVacinaGateway;
+    private final FindUsuarioByIdGateway findUsuarioByIdGateway;
     private final FindPostoVacinacaoByIdGateway findPostoVacinacaoByIdGateway;
+    private final AgendamentoRequestMapper agendamentoRequestMapper;
+    private final CreateAgendamentoGateway createAgendamentoGateway;
 
     public CriarAgendamentoUseCaseImpl(
             FindConfirmedByUsuarioAndVacinaDatabaseGateway findByUsuarioAndVacinaGateway,
-            FindPostoVacinacaoByIdProviderGateway findPostoVacinacaoByIdGateway
+            FindUsuarioByIdProviderGateway findUsuarioByIdGateway,
+            FindPostoVacinacaoByIdProviderGateway findPostoVacinacaoByIdGateway,
+            AgendamentoRequestMapper agendamentoRequestMapper,
+            CreateAgendamentoDatabaseGateway createAgendamentoGateway
     ) {
         this.findConfirmedByUsuarioAndVacinaGateway = findByUsuarioAndVacinaGateway;
+        this.findUsuarioByIdGateway = findUsuarioByIdGateway;
         this.findPostoVacinacaoByIdGateway = findPostoVacinacaoByIdGateway;
+        this.agendamentoRequestMapper = agendamentoRequestMapper;
+        this.createAgendamentoGateway = createAgendamentoGateway;
     }
 
     @Override
     public Agendamento execute(final AgendamentoRequest request) {
-        // TODO: Verificar se já existe um agendamento para o mesmo usuario, com a mesma vacina que esteja pendente - OK
         findConfirmedByUsuarioAndVacinaGateway.find(request.usuarioId(), request.vacinaId())
                 .ifPresent(a -> {
                     throw AgendamentoAlreayExistsException.of();
                 });
 
-        // TODO: Realizar requisição para validar o usuario
-        // TODO: Como verificar se o usuario pode tomar a vacina?
-        //agendamento.getUsuarioId();
-
-        // TODO: Realizar requisição para validar o posto de vacinação - OK
-        // TODO: Validar horário solicitado para agendamento no local
-        // TODO: Verificar se tem estoque da vacina no posto
-        final var postoVacinacao = findPostoVacinacaoByIdGateway.find(request.postoVacinacaoId(), request.vacinaId())
+        final var postoVacinacao = findPostoVacinacaoByIdGateway.find(request.postoVacinacaoId())
                 .orElseThrow(NotFoundException::ofPostoVacinacao);
 
-        return null;
+        if (postoVacinacao.isClosed(request.dataHoraAgendamento())) {
+            throw new CustomValidationException("Posto de Vacinação", "fechado no dia ou horário solicitado");
+        }
+
+        // TODO: Como verificar se o usuario pode tomar a vacina?
+        final var usuario = findUsuarioByIdGateway.find(request.usuarioId())
+                .orElseThrow(NotFoundException::ofUsuario);
+
+        // TODO: Verificar se tem estoque da vacina no posto
+
+        return createAgendamentoGateway.create(agendamentoRequestMapper.toDomain(request));
     }
 }

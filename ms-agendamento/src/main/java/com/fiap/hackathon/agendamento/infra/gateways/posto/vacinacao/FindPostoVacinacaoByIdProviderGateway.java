@@ -26,10 +26,10 @@ public class FindPostoVacinacaoByIdProviderGateway implements FindPostoVacinacao
     }
 
     @Override
-    public Optional<PostoVacinacao> find(final Long postoVacinacaoId, final Long vacinaId) {
+    public Optional<PostoVacinacao> find(final Long id) {
         log.info("Buscando posto de vacinação no microsserviço...");
         try {
-            return Optional.ofNullable(client.getPostoAndVacinaById(postoVacinacaoId, vacinaId))
+            return Optional.ofNullable(client.getPostoVacinacaoById(id))
                     .map(postoVacinacaoResponseMapper::toDomain);
         } catch (FeignException e) {
             if (e.status() != HttpStatus.NOT_FOUND.value()) {

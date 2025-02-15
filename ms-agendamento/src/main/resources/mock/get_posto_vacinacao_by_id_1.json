@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/postos/1/vacinas/2"
+    "url": "/postos/1"
   },
   "response": {
     "status": 200,
@@ -57,18 +57,7 @@
             "termino": "12:00"
           }
         }
-      ],
-      "vacina": {
-        "id": 1,
-        "lotes": [
-          {
-            "id": 1,
-            "codigo": "164XX532",
-            "estoque": 100,
-            "validade": "31/12/2030"
-          }
-        ]
-      }
+      ]
     }
   }
 }

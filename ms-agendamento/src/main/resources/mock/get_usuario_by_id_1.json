@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/usuarios/1"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": 1,
+      "nome": "Vinicius Gomes",
+      "cpf": "12345678911",
+      "email": "myemail@mail.com",
+      "numeroCarteira": "123123"
+    }
+  }
+}

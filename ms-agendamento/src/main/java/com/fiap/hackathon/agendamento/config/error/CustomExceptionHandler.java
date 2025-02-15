@@ -5,6 +5,7 @@ import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationExceptio
 import com.fiap.hackathon.agendamento.domain.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,12 +20,19 @@ public class CustomExceptionHandler {
     @ExceptionHandler({
             CustomValidationException.class,
             NullPointerException.class,
-            AgendamentoAlreayExistsException.class
+            AgendamentoAlreayExistsException.class,
     })
     public ResponseEntity<ApiErrorResponse> handleValidationError(final Exception e) {
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(ApiErrorResponse.of(e, e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidError(final MethodArgumentNotValidException e) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(ApiErrorResponse.of(e));
     }
 
     @ExceptionHandler(NotFoundException.class)
