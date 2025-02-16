@@ -1,4 +1,4 @@
-package com.br.fiap.application.controller.mapper;
+package com.br.fiap.core.mapper;
 
 import com.br.fiap.core.entity.MovimentacaoVacinaData;
 import com.br.fiap.core.model.MovimentacaoVacina;

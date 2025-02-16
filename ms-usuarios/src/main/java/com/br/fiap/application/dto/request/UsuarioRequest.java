@@ -1,4 +1,4 @@
-package com.br.fiap.application.dto;
+package com.br.fiap.application.dto.request;
 
 import com.br.fiap.core.enums.TipoPacienteEnum;
 

@@ -1,14 +1,18 @@
 package com.br.fiap.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fiap.techchallenge4.product.core.enums.StatusCsv;
+import com.br.fiap.core.enums.TipoPacienteEnum;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +20,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,23 +30,41 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "USUARIOS")
-public class CsvLoaderData {
+public class UsuarioData {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileName;
+    @Column
+    private String nome;
 
-    private String path;
+    @Column
+    private String cpf;
+
+    @Column
+    private String email;
+
+    @Column
+    private String telefone;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "endereco_id")
+    private EnderecoData endereco;
+
+    @Column(name = "data_nascimento")
+    private LocalDate dataNascimento;
+
+    @Column(name = "numero_carteirinha_sus")
+    private String numeroCarteirinhaSUS;
 
     @Enumerated(EnumType.STRING)
-    private StatusCsv statusCsv;
+    @Column
+    private TipoPacienteEnum tipo;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
-    private LocalDateTime createdDate;
+    @OneToMany(mappedBy = "titular", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<DependenteData> dependentes;
 
-   @PrePersist
-    public void setCreatedDate() {
-        this.createdDate = LocalDateTime.now();
-    }
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<MovimentacaoVacinaData> movimentacaoVacinal;
 }

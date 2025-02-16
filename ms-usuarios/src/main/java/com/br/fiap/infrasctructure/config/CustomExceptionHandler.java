@@ -1,8 +1,8 @@
 package com.br.fiap.infrasctructure.config;
 
-import com.fiap.techchallenge4.product.application.dto.ApiResponse;
-import com.fiap.techchallenge4.product.application.exception.NotFoundException;
-import com.fiap.techchallenge4.product.application.exception.ValidationException;
+import com.br.fiap.application.dto.response.ApiResponse;
+import com.br.fiap.application.exception.NotFoundException;
+import com.br.fiap.application.exception.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
-public class CustomExceptionHandler {
+public class  CustomExceptionHandler {
 
     @ExceptionHandler({ValidationException.class, IllegalArgumentException.class})
     public ResponseEntity<ApiResponse> handleValidationError(Exception e, WebRequest request) {

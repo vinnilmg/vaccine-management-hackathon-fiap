@@ -4,8 +4,8 @@ import static java.lang.String.format;
 
 public class ValidationException extends RuntimeException {
 
-    private final String field;
-    private final String message;
+     final String field;
+     final String message;
 
     public ValidationException(final String field, final String message) {
         super(message);

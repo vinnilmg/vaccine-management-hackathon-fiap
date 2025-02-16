@@ -1,4 +1,4 @@
-package com.br.fiap.application.controller.mapper;
+package com.br.fiap.core.mapper;
 
 import com.br.fiap.core.entity.DependenteData;
 import com.br.fiap.core.model.Dependente;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class DependenteMapper {
 
-     final ModelMapper modelMapper;
+    final ModelMapper modelMapper;
 
     public Dependente toModel(DependenteData dependenteData) {
         TypeMap<DependenteData, Dependente> typeMap = modelMapper.getTypeMap(DependenteData.class, Dependente.class);

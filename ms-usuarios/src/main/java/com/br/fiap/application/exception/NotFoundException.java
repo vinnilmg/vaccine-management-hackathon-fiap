@@ -2,7 +2,7 @@ package com.br.fiap.application.exception;
 
 public class NotFoundException extends RuntimeException {
 
-    private final String resource;
+     final String resource;
 
     public NotFoundException(final String resource) {
         super(resource);
