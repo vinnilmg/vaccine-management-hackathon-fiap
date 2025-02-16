@@ -9,17 +9,21 @@ public class VacinaDomain implements Vacina{
     private String nome;
     private String fabricante;
     private String tipo;
-    private List<String> doencasPrevinidas;
+    private String doencasPrevinidas;
     private int numeroDoses;
     private int intervaloDoses;
     private int idadeMinima;
     private int idadeMaxima;
     private String contraIndicacoes;
-    private List<String> efeitosColaterais;
+    private String efeitosColaterais;
 
     @Override
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     @Override
@@ -27,9 +31,17 @@ public class VacinaDomain implements Vacina{
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     @Override
     public String getFabricante() {
         return fabricante;
+    }
+
+    public void setFabricante(String fabricante) {
+        this.fabricante = fabricante;
     }
 
     @Override
@@ -37,9 +49,17 @@ public class VacinaDomain implements Vacina{
         return tipo;
     }
 
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     @Override
-    public List<String> getDoencasPrevinidas() {
-        return List.of(doencasPrevinidas.toString());
+    public String getDoencasPrevinidas() {
+        return doencasPrevinidas;
+    }
+
+    public void setDoencasPrevinidas(String doencasPrevinidas) {
+        this.doencasPrevinidas = doencasPrevinidas;
     }
 
     @Override
@@ -47,9 +67,17 @@ public class VacinaDomain implements Vacina{
         return numeroDoses;
     }
 
+    public void setNumeroDoses(int numeroDoses) {
+        this.numeroDoses = numeroDoses;
+    }
+
     @Override
     public int getIntervaloDoses() {
         return intervaloDoses;
+    }
+
+    public void setIntervaloDoses(int intervaloDoses) {
+        this.intervaloDoses = intervaloDoses;
     }
 
     @Override
@@ -57,9 +85,17 @@ public class VacinaDomain implements Vacina{
         return idadeMinima;
     }
 
+    public void setIdadeMinima(int idadeMinima) {
+        this.idadeMinima = idadeMinima;
+    }
+
     @Override
     public int getIdadeMaxima() {
         return idadeMaxima;
+    }
+
+    public void setIdadeMaxima(int idadeMaxima) {
+        this.idadeMaxima = idadeMaxima;
     }
 
     @Override
@@ -67,8 +103,16 @@ public class VacinaDomain implements Vacina{
         return contraIndicacoes;
     }
 
+    public void setContraIndicacoes(String contraIndicacoes) {
+        this.contraIndicacoes = contraIndicacoes;
+    }
+
     @Override
-    public List<String> getEfeitosColaterais() {
-        return List.of(efeitosColaterais.toString());
+    public String getEfeitosColaterais() {
+        return efeitosColaterais;
+    }
+
+    public void setEfeitosColaterais(String efeitosColaterais) {
+        this.efeitosColaterais = efeitosColaterais;
     }
 }
