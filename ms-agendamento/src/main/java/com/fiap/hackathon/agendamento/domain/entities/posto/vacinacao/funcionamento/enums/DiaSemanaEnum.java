@@ -8,17 +8,20 @@ public enum DiaSemanaEnum {
     TERCA,
     QUARTA,
     QUINTA,
-    SEXTA;
+    SEXTA,
+    SABADO,
+    DOMINGO;
 
     public static Optional<DiaSemanaEnum> of(final DayOfWeek dayOfWeek) {
-        return Optional.ofNullable(
+        return Optional.of(
                 switch (dayOfWeek) {
                     case MONDAY -> SEGUNDA;
                     case TUESDAY -> TERCA;
                     case WEDNESDAY -> QUARTA;
                     case THURSDAY -> QUINTA;
                     case FRIDAY -> SEXTA;
-                    default -> null;
+                    case SATURDAY -> SABADO;
+                    case SUNDAY -> DOMINGO;
                 }
         );
     }

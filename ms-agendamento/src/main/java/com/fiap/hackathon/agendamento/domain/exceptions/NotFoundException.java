@@ -35,4 +35,8 @@ public class NotFoundException extends RuntimeException {
     public static NotFoundException ofUsuario() {
         return of("Usuário");
     }
+
+    public static NotFoundException ofVacina() {
+        return of("Vacina");
+    }
 }

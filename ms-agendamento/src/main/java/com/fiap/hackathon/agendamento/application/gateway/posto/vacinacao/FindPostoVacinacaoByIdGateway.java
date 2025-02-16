@@ -1,10 +1,10 @@
 package com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao;
 
-import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.PostoVacinacao;
+import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.PostoVacinacaoComLotes;
 
 import java.util.Optional;
 
 @FunctionalInterface
 public interface FindPostoVacinacaoByIdGateway {
-    Optional<PostoVacinacao> find(Long id);
+    Optional<PostoVacinacaoComLotes> find(Long id);
 }

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/usuarios/historico-vacinacao",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

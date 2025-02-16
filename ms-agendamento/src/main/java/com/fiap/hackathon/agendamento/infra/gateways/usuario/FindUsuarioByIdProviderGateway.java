@@ -1,9 +1,9 @@
 package com.fiap.hackathon.agendamento.infra.gateways.usuario;
 
 import com.fiap.hackathon.agendamento.application.gateway.usuario.FindUsuarioByIdGateway;
-import com.fiap.hackathon.agendamento.domain.entities.usuario.Usuario;
+import com.fiap.hackathon.agendamento.domain.entities.usuario.UsuarioComHistorico;
 import com.fiap.hackathon.agendamento.infra.client.UsuarioClient;
-import com.fiap.hackathon.agendamento.infra.client.mappers.UsuarioResponseMapper;
+import com.fiap.hackathon.agendamento.infra.client.mappers.response.UsuarioResponseMapper;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class FindUsuarioByIdProviderGateway implements FindUsuarioByIdGateway {
     }
 
     @Override
-    public Optional<Usuario> find(final Long id) {
+    public Optional<UsuarioComHistorico> find(final Long id) {
         log.info("Buscando usuário no microsserviço...");
         try {
             return Optional.ofNullable(usuarioClient.getUsuarioById(id))
