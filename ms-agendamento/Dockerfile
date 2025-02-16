@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN mvn clean package -Pdev -Dmaven.test.skip
+RUN mvn clean package -Pprd -Dmaven.test.skip
 
 FROM openjdk:17-alpine
 
