@@ -152,6 +152,19 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
+		<profile>
+			<id>prd</id>
+			<dependencies>
+				<!-- postgres -->
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<version>42.7.4</version>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<build>
