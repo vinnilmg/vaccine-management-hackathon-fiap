@@ -5,6 +5,7 @@ import com.fiap.hackathon.agendamento.infra.client.response.posto.vacinacao.lote
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @FeignClient(value = "posto-vacinacao", url = "${ms-postos-vacina.host}")
 public interface PostoVacinacaoClient {
@@ -17,4 +18,10 @@ public interface PostoVacinacaoClient {
         @PathVariable Long postoVacinacaoId,
         @PathVariable Long vacinaId
     );
+
+    @PutMapping(value = "/postos/{postoVacinacaoId}/lotes/{vacinaId}/diminuir-estoque")
+    void decreaseStock(@PathVariable Long postoVacinacaoId, @PathVariable Long vacinaId);
+
+    @PutMapping(value = "/postos/{postoVacinacaoId}/lotes/{vacinaId}/aumentar-estoque")
+    void increaseStock(@PathVariable Long postoVacinacaoId, @PathVariable Long vacinaId);
 }

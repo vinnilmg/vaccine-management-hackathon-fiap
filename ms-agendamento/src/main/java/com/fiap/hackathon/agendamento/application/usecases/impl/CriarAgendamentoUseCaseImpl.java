@@ -2,6 +2,7 @@ package com.fiap.hackathon.agendamento.application.usecases.impl;
 
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.CreateAgendamentoGateway;
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindConfirmedByUsuarioAndVacinaGateway;
+import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.DecreaseStockByPostoVacinacaoAndVacinaIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindLoteByPostoVacinacaoAndVacinaIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindPostoVacinacaoByIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.usuario.FindHistoricoVacinacaoByUsuarioAndVacinaIdGateway;
@@ -16,6 +17,7 @@ import com.fiap.hackathon.agendamento.infra.controllers.mappers.AgendamentoReque
 import com.fiap.hackathon.agendamento.infra.controllers.request.AgendamentoRequest;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.CreateAgendamentoDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindConfirmedByUsuarioAndVacinaDatabaseGateway;
+import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.DecreaseStockByPostoVacinacaoAndVacinaIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.FindLoteByPostoVacinacaoAndVacinaIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.FindPostoVacinacaoByIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.usuario.FindHistoricoVacinacaoByUsuarioAndVacinaIdProviderGateway;
@@ -33,6 +35,7 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
     private final FindHistoricoVacinacaoByUsuarioAndVacinaIdGateway findHistoricoVacinacaoByUsuarioAndVacinaIdGateway;
     private final FindVacinaByIdGateway findVacinaByIdGateway;
     private final FindLoteByPostoVacinacaoAndVacinaIdGateway findLoteByPostoVacinacaoAndVacinaIdGateway;
+    private final DecreaseStockByPostoVacinacaoAndVacinaIdGateway decreaseStockByPostoVacinacaoAndVacinaIdGateway;
 
     public CriarAgendamentoUseCaseImpl(
             FindConfirmedByUsuarioAndVacinaDatabaseGateway findByUsuarioAndVacinaGateway,
@@ -42,7 +45,8 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
             CreateAgendamentoDatabaseGateway createAgendamentoGateway,
             FindHistoricoVacinacaoByUsuarioAndVacinaIdProviderGateway findHistoricoVacinacaoByUsuarioAndVacinaIdGateway,
             FindVacinaByIdProviderGateway findVacinaByIdGateway,
-            FindLoteByPostoVacinacaoAndVacinaIdProviderGateway findLoteByPostoVacinacaoAndVacinaIdGateway
+            FindLoteByPostoVacinacaoAndVacinaIdProviderGateway findLoteByPostoVacinacaoAndVacinaIdGateway,
+            DecreaseStockByPostoVacinacaoAndVacinaIdProviderGateway decreaseStockByLoteIdGateway
     ) {
         this.findConfirmedByUsuarioAndVacinaGateway = findByUsuarioAndVacinaGateway;
         this.findUsuarioByIdGateway = findUsuarioByIdGateway;
@@ -52,6 +56,7 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
         this.findHistoricoVacinacaoByUsuarioAndVacinaIdGateway = findHistoricoVacinacaoByUsuarioAndVacinaIdGateway;
         this.findVacinaByIdGateway = findVacinaByIdGateway;
         this.findLoteByPostoVacinacaoAndVacinaIdGateway = findLoteByPostoVacinacaoAndVacinaIdGateway;
+        this.decreaseStockByPostoVacinacaoAndVacinaIdGateway = decreaseStockByLoteIdGateway;
     }
 
     @Override
@@ -88,6 +93,10 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
             throw new CustomValidationException("Posto de Vacinação", "não possui estoque para a vacina");
         }
 
-        return createAgendamentoGateway.create(agendamentoRequestMapper.toDomain(request));
+        final var agendamento = createAgendamentoGateway.create(agendamentoRequestMapper.toDomain(request));
+
+        decreaseStockByPostoVacinacaoAndVacinaIdGateway.decrease(postoVacinacao.getId(), vacina.getId());
+
+        return agendamento;
     }
 }

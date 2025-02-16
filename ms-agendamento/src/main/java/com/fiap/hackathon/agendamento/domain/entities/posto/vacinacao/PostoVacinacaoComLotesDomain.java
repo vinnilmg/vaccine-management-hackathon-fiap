@@ -8,6 +8,7 @@ import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationExceptio
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
@@ -73,6 +74,13 @@ public class PostoVacinacaoComLotesDomain implements PostoVacinacaoComLotes {
     @Override
     public List<Lote> getLotes() {
         return lotes;
+    }
+
+    @Override
+    public Optional<Lote> getLote(final Long vacinaId) {
+        return lotes.stream()
+                .filter(lote -> lote.getVacinaId().equals(vacinaId))
+                .findFirst();
     }
 
     @Override
