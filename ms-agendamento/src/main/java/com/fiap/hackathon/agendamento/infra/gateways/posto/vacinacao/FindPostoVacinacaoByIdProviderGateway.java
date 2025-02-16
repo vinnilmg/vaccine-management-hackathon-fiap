@@ -3,7 +3,7 @@ package com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindPostoVacinacaoByIdGateway;
 import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.PostoVacinacao;
 import com.fiap.hackathon.agendamento.infra.client.PostoVacinacaoClient;
-import com.fiap.hackathon.agendamento.infra.client.mappers.PostoVacinacaoResponseMapper;
+import com.fiap.hackathon.agendamento.infra.client.mappers.response.PostoVacinacaoResponseMapper;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

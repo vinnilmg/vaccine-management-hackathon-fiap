@@ -1,6 +1,7 @@
-package com.fiap.hackathon.agendamento.infra.client.mappers;
+package com.fiap.hackathon.agendamento.infra.client.mappers.response;
 
 import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.funcionamento.FuncionamentoDomain;
+import com.fiap.hackathon.agendamento.infra.client.response.posto.vacinacao.FuncionamentoPostoResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,8 +15,8 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface FuncionamentoPostoResponseMapper {
 
-    @Mapping(target = "diaSemana", source = "diaSemana")
+    @Mapping(target = "diaSemana", source = "dia")
     @Mapping(target = "horarioInicio", source = "horario.inicio")
     @Mapping(target = "horarioFim", source = "horario.termino")
-    FuncionamentoDomain toDomain();
+    FuncionamentoDomain toDomain(FuncionamentoPostoResponse funcionamentoPostoResponse);
 }

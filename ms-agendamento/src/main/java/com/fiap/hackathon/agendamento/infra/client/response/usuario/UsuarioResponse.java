@@ -1,4 +1,4 @@
-package com.fiap.hackathon.agendamento.infra.client.response;
+package com.fiap.hackathon.agendamento.infra.client.response.usuario;
 
 public record UsuarioResponse(
     Long id,

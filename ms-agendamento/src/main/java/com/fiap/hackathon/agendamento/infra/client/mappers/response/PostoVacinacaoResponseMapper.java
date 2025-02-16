@@ -1,7 +1,7 @@
-package com.fiap.hackathon.agendamento.infra.client.mappers;
+package com.fiap.hackathon.agendamento.infra.client.mappers.response;
 
-import com.fiap.hackathon.agendamento.domain.entities.usuario.UsuarioDomain;
-import com.fiap.hackathon.agendamento.infra.client.response.UsuarioResponse;
+import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.PostoVacinacaoDomain;
+import com.fiap.hackathon.agendamento.infra.client.response.posto.vacinacao.PostoVacinacaoResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,12 +14,10 @@ import org.mapstruct.ReportingPolicy;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         uses = {VacinaResponseMapper.class, FuncionamentoPostoResponseMapper.class}
 )
-public interface UsuarioResponseMapper {
+public interface PostoVacinacaoResponseMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "nome", source = "nome")
-    @Mapping(target = "email", source = "email")
-    @Mapping(target = "cpf", source = "cpf")
-    @Mapping(target = "numeroCarteira", source = "numeroCarteira")
-    UsuarioDomain toDomain(UsuarioResponse usuarioResponse);
+    @Mapping(target = "funcionamento", source = "funcionamento")
+    PostoVacinacaoDomain toDomain(PostoVacinacaoResponse postoVacinacaoResponse);
 }
