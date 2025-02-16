@@ -86,11 +86,6 @@
 			<version>0.2.0</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.fiap.hackathon</groupId>
-			<artifactId>ms-postos-vacina</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
