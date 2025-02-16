@@ -2,29 +2,31 @@ package com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao;
 
 import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.funcionamento.Funcionamento;
 import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.funcionamento.enums.DiaSemanaEnum;
+import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.lote.Lote;
 import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
-public class PostoVacinacaoDomain implements PostoVacinacao {
+public class PostoVacinacaoComLotesDomain implements PostoVacinacaoComLotes {
     private final Long id;
     private final String nome;
     private final List<Funcionamento> funcionamento;
-    //private final Vacina vacina;
+    private final List<Lote> lotes;
 
-    public PostoVacinacaoDomain(
+    public PostoVacinacaoComLotesDomain(
             final Long id,
             final String nome,
             final List<Funcionamento> funcionamento
-            //final Vacina vacina
     ) {
         this.id = requireNonNull(id, "Id cannot be null");
         this.nome = requireNonNull(nome, "Nome cannot be null");
         this.funcionamento = requireNonNull(funcionamento, "Funcionamento cannot be null");
-        //this.vacina = requireNonNull(vacina, "Vacina cannot be null");
+        this.lotes = new ArrayList<>();
     }
 
     @Override
@@ -68,8 +70,29 @@ public class PostoVacinacaoDomain implements PostoVacinacao {
         return !isOpen(dataHoraAgendamento);
     }
 
-    /*@Override
-    public Vacina getVacina() {
-        return vacina;
-    }*/
+    @Override
+    public List<Lote> getLotes() {
+        return lotes;
+    }
+
+    @Override
+    public void putLote(final Lote lote) {
+        if (nonNull(lote)) this.lotes.add(lote);
+    }
+
+    @Override
+    public boolean isContainsStock(final Long vacinaId) {
+        if (lotes.isEmpty()) return false;
+
+        return lotes.stream()
+                .filter(lote -> lote.getVacinaId().equals(vacinaId))
+                .map(Lote::containsEstoque)
+                .findFirst()
+                .orElse(false);
+    }
+
+    @Override
+    public boolean isNoContainsStock(final Long vacinaId) {
+        return !isContainsStock(vacinaId);
+    }
 }

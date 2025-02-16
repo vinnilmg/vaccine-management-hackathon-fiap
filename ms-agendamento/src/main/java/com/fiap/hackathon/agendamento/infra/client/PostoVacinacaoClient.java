@@ -1,6 +1,7 @@
 package com.fiap.hackathon.agendamento.infra.client;
 
 import com.fiap.hackathon.agendamento.infra.client.response.posto.vacinacao.PostoVacinacaoResponse;
+import com.fiap.hackathon.agendamento.infra.client.response.posto.vacinacao.lote.LoteVacinaResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,4 +11,10 @@ public interface PostoVacinacaoClient {
 
     @GetMapping(value = "/postos/{postoVacinacaoId}", produces = "application/json")
     PostoVacinacaoResponse getPostoVacinacaoById(@PathVariable Long postoVacinacaoId);
+
+    @GetMapping(value = "/postos/{postoVacinacaoId}/lotes/{vacinaId}", produces = "application/json")
+    LoteVacinaResponse getLoteByPostoVacinacaoIdAndVacinaId(
+        @PathVariable Long postoVacinacaoId,
+        @PathVariable Long vacinaId
+    );
 }

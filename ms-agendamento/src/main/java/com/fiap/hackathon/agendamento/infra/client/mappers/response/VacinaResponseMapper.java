@@ -15,16 +15,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface VacinaResponseMapper {
 
-    /*@Mapping(target = "id", source = "id")
-    @Mapping(target = "lotes", source = "lotes")
-    VacinaDomain toDomain(VacinaResponse vacinaResponse);
-
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "codigo", source = "codigo")
-    @Mapping(target = "estoque", source = "estoque")
-    @Mapping(target = "dataValidade", source = "validade")
-    LoteDomain toLoteDomain(LoteVacinaResponse loteVacinaResponse);*/
-
     @Mapping(target = "id", source = "id")
     @Mapping(target = "nome", source = "nome")
     @Mapping(target = "fabricante", source = "fabricante")

@@ -12,8 +12,6 @@ public interface PostoVacinacao {
 
     List<Funcionamento> getFuncionamento();
 
-    // Vacina getVacina();
-
     boolean isOpen(LocalDateTime dataHoraAgendamento);
 
     boolean isClosed(LocalDateTime dataHoraAgendamento);

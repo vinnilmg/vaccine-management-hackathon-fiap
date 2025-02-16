@@ -2,6 +2,7 @@ package com.fiap.hackathon.agendamento.application.usecases.impl;
 
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.CreateAgendamentoGateway;
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindConfirmedByUsuarioAndVacinaGateway;
+import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindLoteByPostoVacinacaoAndVacinaIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindPostoVacinacaoByIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.usuario.FindHistoricoVacinacaoByUsuarioAndVacinaIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.usuario.FindUsuarioByIdGateway;
@@ -15,6 +16,7 @@ import com.fiap.hackathon.agendamento.infra.controllers.mappers.AgendamentoReque
 import com.fiap.hackathon.agendamento.infra.controllers.request.AgendamentoRequest;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.CreateAgendamentoDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindConfirmedByUsuarioAndVacinaDatabaseGateway;
+import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.FindLoteByPostoVacinacaoAndVacinaIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.FindPostoVacinacaoByIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.usuario.FindHistoricoVacinacaoByUsuarioAndVacinaIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.usuario.FindUsuarioByIdProviderGateway;
@@ -30,6 +32,7 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
     private final CreateAgendamentoGateway createAgendamentoGateway;
     private final FindHistoricoVacinacaoByUsuarioAndVacinaIdGateway findHistoricoVacinacaoByUsuarioAndVacinaIdGateway;
     private final FindVacinaByIdGateway findVacinaByIdGateway;
+    private final FindLoteByPostoVacinacaoAndVacinaIdGateway findLoteByPostoVacinacaoAndVacinaIdGateway;
 
     public CriarAgendamentoUseCaseImpl(
             FindConfirmedByUsuarioAndVacinaDatabaseGateway findByUsuarioAndVacinaGateway,
@@ -38,7 +41,8 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
             AgendamentoRequestMapper agendamentoRequestMapper,
             CreateAgendamentoDatabaseGateway createAgendamentoGateway,
             FindHistoricoVacinacaoByUsuarioAndVacinaIdProviderGateway findHistoricoVacinacaoByUsuarioAndVacinaIdGateway,
-            FindVacinaByIdProviderGateway findVacinaByIdGateway
+            FindVacinaByIdProviderGateway findVacinaByIdGateway,
+            FindLoteByPostoVacinacaoAndVacinaIdProviderGateway findLoteByPostoVacinacaoAndVacinaIdGateway
     ) {
         this.findConfirmedByUsuarioAndVacinaGateway = findByUsuarioAndVacinaGateway;
         this.findUsuarioByIdGateway = findUsuarioByIdGateway;
@@ -47,6 +51,7 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
         this.createAgendamentoGateway = createAgendamentoGateway;
         this.findHistoricoVacinacaoByUsuarioAndVacinaIdGateway = findHistoricoVacinacaoByUsuarioAndVacinaIdGateway;
         this.findVacinaByIdGateway = findVacinaByIdGateway;
+        this.findLoteByPostoVacinacaoAndVacinaIdGateway = findLoteByPostoVacinacaoAndVacinaIdGateway;
     }
 
     @Override
@@ -69,14 +74,19 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
         final var vacina = findVacinaByIdGateway.find(request.vacinaId())
                 .orElseThrow(NotFoundException::ofVacina);
 
-        final var historico = findHistoricoVacinacaoByUsuarioAndVacinaIdGateway.find(request.usuarioId(), request.vacinaId());
+        final var historico = findHistoricoVacinacaoByUsuarioAndVacinaIdGateway.find(usuario.getId(), vacina.getId());
         usuario.putHistorico(historico);
 
         if (usuario.isCannotGetAVaccine(vacina, request.dataHoraAgendamento())) {
             throw new CustomValidationException("Usuario", "não pode tomar uma nova dose, pois a última dose ainda não venceu");
         }
 
-        // TODO: Verificar se tem estoque da vacina no posto
+        findLoteByPostoVacinacaoAndVacinaIdGateway.find(postoVacinacao.getId(), vacina.getId())
+                .ifPresent(postoVacinacao::putLote);
+
+        if (postoVacinacao.isNoContainsStock(vacina.getId())) {
+            throw new CustomValidationException("Posto de Vacinação", "não possui estoque para a vacina");
+        }
 
         return createAgendamentoGateway.create(agendamentoRequestMapper.toDomain(request));
     }

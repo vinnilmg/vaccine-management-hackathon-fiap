@@ -1,6 +1,6 @@
 package com.fiap.hackathon.agendamento.infra.client.mappers.response;
 
-import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.PostoVacinacaoDomain;
+import com.fiap.hackathon.agendamento.domain.entities.posto.vacinacao.PostoVacinacaoComLotesDomain;
 import com.fiap.hackathon.agendamento.infra.client.response.posto.vacinacao.PostoVacinacaoResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -19,5 +19,5 @@ public interface PostoVacinacaoResponseMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "nome", source = "nome")
     @Mapping(target = "funcionamento", source = "funcionamento")
-    PostoVacinacaoDomain toDomain(PostoVacinacaoResponse postoVacinacaoResponse);
+    PostoVacinacaoComLotesDomain toDomain(PostoVacinacaoResponse postoVacinacaoResponse);
 }

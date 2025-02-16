@@ -8,6 +8,4 @@ public interface HistoricoCompleto {
     boolean isExists();
 
     boolean isNotExists();
-
-
 }
