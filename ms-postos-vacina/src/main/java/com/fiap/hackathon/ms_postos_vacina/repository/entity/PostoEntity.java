@@ -4,6 +4,7 @@ import com.fiap.hackathon.ms_postos_vacina.repository.entity.enums.StatusPostoEn
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.enums.TipoLocalEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,13 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "posto")
-public class Posto {
+public class PostoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +27,16 @@ public class Posto {
     @NotBlank
     private String nome;
 
-    @OneToOne
+    @NotNull
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
-    private Endereco endereco;
+    private EnderecoEntity endereco;
 
     @Enumerated(EnumType.STRING)
     private TipoLocalEnum tipoLocal;
 
-    @OneToMany
-    @JoinColumn(name = "funcionamento_id", referencedColumnName = "id")
-    private List<Funcionamento> funcionamento;
+    @OneToMany(mappedBy = "posto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<FuncionamentoEntity> funcionamento;
 
     @Enumerated(EnumType.STRING)
     private StatusPostoEnum status;

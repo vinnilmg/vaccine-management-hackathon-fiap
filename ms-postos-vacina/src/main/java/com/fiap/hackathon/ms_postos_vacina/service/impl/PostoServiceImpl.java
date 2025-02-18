@@ -5,12 +5,20 @@ import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoUpdateRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.PostoResponse;
 import com.fiap.hackathon.ms_postos_vacina.exception.PostoNotFoundException;
+import com.fiap.hackathon.ms_postos_vacina.repository.EnderecoRepository;
+import com.fiap.hackathon.ms_postos_vacina.repository.FuncionamentoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.PostoRepository;
+import com.fiap.hackathon.ms_postos_vacina.repository.entity.EnderecoEntity;
+import com.fiap.hackathon.ms_postos_vacina.repository.entity.FuncionamentoEntity;
+import com.fiap.hackathon.ms_postos_vacina.repository.entity.PostoEntity;
+import com.fiap.hackathon.ms_postos_vacina.repository.mapper.EnderecoMapper;
+import com.fiap.hackathon.ms_postos_vacina.repository.mapper.FuncionamentoMapper;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.PostoMapper;
 import com.fiap.hackathon.ms_postos_vacina.service.PostoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +31,14 @@ public class PostoServiceImpl implements PostoService {
     private PostoResponseMapper postoResponseMapper;
     @Autowired
     private PostoMapper postoMapper;
+    @Autowired
+    private EnderecoMapper enderecoMapper;
+    @Autowired
+    private FuncionamentoMapper funcionamentoMapper;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+    @Autowired
+    private FuncionamentoRepository funcionamentoRepository;
 
     @Override
     public List<PostoResponse> buscaPostos() {
@@ -40,18 +56,32 @@ public class PostoServiceImpl implements PostoService {
     }
 
     @Override
-    public List<PostoResponse> encontraPorBairro(String bairro) {
+    public List<PostoResponse> buscaPorBairro(String bairro) {
         return postoRepository.findByEnderecoBairro(bairro)
                 .stream()
                 .map(postoResponseMapper::toPostoResponse)
                 .toList();
     }
 
+    @Transactional
     @Override
     public PostoResponse criaPosto(PostoRequest request) {
-        final var posto = postoMapper.toPosto(request);
-        postoRepository.save(posto);
-        return postoResponseMapper.toPostoResponse(posto);
+        EnderecoEntity endereco = enderecoMapper.toEndereco(request.endereco());
+
+        PostoEntity posto = postoMapper.toPosto(request);
+        posto.setEndereco(endereco);
+
+        PostoEntity postoSaved = postoRepository.save(posto);
+
+        List<FuncionamentoEntity> funcionamentoList = funcionamentoMapper.toFuncionamentoList(request.funcionamento());
+        funcionamentoList.forEach(f -> f.setPosto(postoSaved));
+
+        List<FuncionamentoEntity> funcionamentoSaved = funcionamentoRepository.saveAll(funcionamentoList);
+
+        postoSaved.setFuncionamento(funcionamentoSaved);
+        postoRepository.save(postoSaved);
+
+        return postoResponseMapper.toPostoResponse(postoSaved);
     }
 
     @Override
@@ -59,9 +89,8 @@ public class PostoServiceImpl implements PostoService {
         var posto = postoRepository.findById(id)
                 .orElseThrow(PostoNotFoundException::new);
 
-        posto.setNome(postoUpdateRequest.getNome());
-        posto.setFuncionamento(postoUpdateRequest.getFuncionamentoList());
-        posto.setStatus(postoUpdateRequest.getStatusPosto());
+        posto.setNome(postoUpdateRequest.nome());
+        posto.setStatus(postoUpdateRequest.statusPostoEnum());
         return postoResponseMapper.toPostoResponse(postoRepository.save(posto));
     }
 

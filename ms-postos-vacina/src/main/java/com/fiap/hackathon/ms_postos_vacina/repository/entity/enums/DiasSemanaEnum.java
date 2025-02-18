@@ -5,5 +5,6 @@ public enum DiasSemanaEnum {
     TERCA,
     QUARTA,
     QUINTA,
-    SEXTA;
+    SEXTA,
+    SABADO;
 }

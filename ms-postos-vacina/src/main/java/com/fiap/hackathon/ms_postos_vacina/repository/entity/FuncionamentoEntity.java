@@ -1,5 +1,6 @@
 package com.fiap.hackathon.ms_postos_vacina.repository.entity;
 
+import com.fiap.hackathon.ms_postos_vacina.repository.entity.enums.DiasSemanaEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,29 +13,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "endereco")
-public class Endereco {
-
+@Table(name = "funcionamento")
+public class FuncionamentoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    private String rua;
+    @Enumerated(EnumType.STRING)
+    private DiasSemanaEnum diaSemana;
 
     @NotBlank
-    private String numero;
-    private String complemento;
+    private String horarioInicio;
 
     @NotBlank
-    private String bairro;
+    private String horarioFim;
 
-    @NotBlank
-    private String cidade;
-
-    @NotBlank
-    private String estado;
-
-    @NotBlank
-    private String cep;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "posto_id", nullable = false)
+    private PostoEntity posto;
 }

@@ -11,7 +11,7 @@ public interface PostoService {
 
     PostoResponse buscaPosto(Long id);
 
-    List<PostoResponse> encontraPorBairro(String bairro);
+    List<PostoResponse> buscaPorBairro(String bairro);
 
     PostoResponse criaPosto(PostoRequest request);
 
