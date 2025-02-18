@@ -36,22 +36,18 @@ public class MovimentacaoVacinaData {
     @Column(name = "sequence")
     private Integer sequence;
 
-    @Column(name = "identificador_vacina")
-    private String identificadorVacina;
+    @Column(name = "vacina_id")
+    private Long vacinaId;
 
     @Column(name = "data_aplicacao")
     private LocalDate dataAplicacao;
 
-    @Column(name = "identificador_local")
-    private String identificadorLocal;
+    @Column(name = "local_id")
+    private Long localId;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UsuarioData usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "dependente_id")
-    private DependenteData dependente;
 
 
     @PrePersist
@@ -59,7 +55,7 @@ public class MovimentacaoVacinaData {
         if (this.sequence == null) {
             List<MovimentacaoVacinaData> movimentacoesVacina = usuario.getMovimentacaoVacinal()
                     .stream()
-                    .filter(mv -> mv.getIdentificadorVacina().equals(this.identificadorVacina))
+                    .filter(mv -> mv.vacinaId.equals(this.vacinaId))
                     .toList();
 
             Integer ultimaSequence = movimentacoesVacina.stream()

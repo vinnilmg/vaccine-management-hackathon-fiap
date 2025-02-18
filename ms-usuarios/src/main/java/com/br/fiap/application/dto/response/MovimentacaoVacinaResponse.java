@@ -4,10 +4,10 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 @Builder
-public record MovimentacaoVacinaResponse(Integer sequence,
-                                         String identificadorVacina,
+public record MovimentacaoVacinaResponse(Long id,
+                                         Integer sequence,
+                                         Long vacinaId,
                                          LocalDate dataAplicacao,
-                                         String identificadorLocal,
-                                         Long usuarioId,
-                                         Long dependenteId) {
+                                         Long localId,
+                                         Long usuarioId) {
 }

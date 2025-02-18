@@ -2,6 +2,8 @@ package com.br.fiap.application.controller.impl;
 
 import com.br.fiap.application.controller.UsuarioController;
 import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
+import com.br.fiap.application.dto.response.UsuarioResponse;
 import com.br.fiap.application.service.UsuarioService;
 import com.br.fiap.core.model.Usuario;
 import lombok.AllArgsConstructor;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/usuario")
+@RequestMapping("/usuarios")
 @AllArgsConstructor
 public class UsuarioControllerImpl implements UsuarioController {
 
@@ -34,8 +36,8 @@ public class UsuarioControllerImpl implements UsuarioController {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
-        Usuario usuario = usuarioService.getById(id);
+    public ResponseEntity<UsuarioResponse> getUsuarioById(@PathVariable Long id) {
+        UsuarioResponse usuario = usuarioService.getById(id);
         return ResponseEntity.ok(usuario);
     }
 
@@ -58,6 +60,13 @@ public class UsuarioControllerImpl implements UsuarioController {
     public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @GetMapping("/{id}/vacinaId/{idVacina}")
+    public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoesVacinByVacinaIdAndUserId(@PathVariable Long id,@PathVariable Long idVacina) {
+         List<MovimentacaoVacinaResponse> movimentacaoVacinaResponseList = usuarioService.getAllMovimentacoesVacinByVacinaIdAndUserId(id,idVacina);
+         return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaResponseList);
     }
 
 }

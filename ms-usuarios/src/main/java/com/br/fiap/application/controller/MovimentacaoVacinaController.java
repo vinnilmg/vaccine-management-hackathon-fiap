@@ -2,7 +2,6 @@ package com.br.fiap.application.controller;
 
 import com.br.fiap.application.dto.request.MovimentacaoVacinaRequest;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
-import com.br.fiap.core.model.MovimentacaoVacina;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "MovimentacaoVacina", description = "Operações relacionadas à movimentação de vacinas")
 public interface MovimentacaoVacinaController {
@@ -23,7 +21,7 @@ public interface MovimentacaoVacinaController {
             @ApiResponse(responseCode = "200", description = "Lista de movimentações de vacinas retornada com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
-    ResponseEntity<List<MovimentacaoVacina>> getAllMovimentacoes();
+    ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoes();
 
     @Operation(
             summary = "Buscar movimentação de vacina por ID",
@@ -34,7 +32,18 @@ public interface MovimentacaoVacinaController {
             @ApiResponse(responseCode = "404", description = "Movimentação de vacina não encontrada"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
-    ResponseEntity<MovimentacaoVacina> getMovimentacaoById(Long id);
+    ResponseEntity<MovimentacaoVacinaResponse> getMovimentacaoById(Long id);
+
+    @Operation(
+            summary = "Buscar movimentação de vacina por ID do Usuário",
+            description = "Retorna uma movimentação de vacina com base no ID do Usuário."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Movimentação de vacina encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Movimentação de vacina não encontrada"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
+    })
+    ResponseEntity<List<MovimentacaoVacinaResponse>> getMovimentacaoByIdUsuario(Long id);
 
     @Operation(
             summary = "Criar uma nova movimentação de vacina",

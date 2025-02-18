@@ -1,6 +1,8 @@
 package com.br.fiap.application.service;
 
 import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
+import com.br.fiap.application.dto.response.UsuarioResponse;
 import com.br.fiap.core.model.Usuario;
 
 import java.util.List;
@@ -9,7 +11,9 @@ public interface UsuarioService {
 
     List<Usuario> getAll();
 
-    Usuario getById(Long id);
+    UsuarioResponse getById(Long id);
+
+    public List<MovimentacaoVacinaResponse> getAllMovimentacoesVacinByVacinaIdAndUserId(Long userId,Long vacinaId);
 
     Usuario create(UsuarioRequest usuarioModel);
 

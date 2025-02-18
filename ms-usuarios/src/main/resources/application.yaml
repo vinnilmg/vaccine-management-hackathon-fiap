@@ -26,5 +26,5 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG  # Habilita o log das queries SQL
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Habilita o log dos parâmetros das queries
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -30,7 +30,7 @@ public class Usuario {
 
     private String telefone;
 
-    private EnderecoData endereco;
+    private Endereco endereco;
 
     private LocalDate dataNascimento;
 
@@ -38,7 +38,9 @@ public class Usuario {
 
     private TipoPacienteEnum tipo;
 
-    private List<Dependente> dependentes;
+    private Usuario dependenteDe;
+
+    private List<Usuario> dependentes;
 
     private List<MovimentacaoVacina> movimentacaoVacinal;
 }

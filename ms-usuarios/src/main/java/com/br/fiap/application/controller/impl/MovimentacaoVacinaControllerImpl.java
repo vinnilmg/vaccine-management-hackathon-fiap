@@ -4,7 +4,6 @@ import com.br.fiap.application.controller.MovimentacaoVacinaController;
 import com.br.fiap.application.dto.request.MovimentacaoVacinaRequest;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
 import com.br.fiap.application.service.MovimentacaoVacinaService;
-import com.br.fiap.core.model.MovimentacaoVacina;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/movimentacao-vacina")
+@RequestMapping("/movimentacao-vacina")
 @AllArgsConstructor
 public class MovimentacaoVacinaControllerImpl implements MovimentacaoVacinaController {
 
@@ -28,18 +27,20 @@ public class MovimentacaoVacinaControllerImpl implements MovimentacaoVacinaContr
 
     @Override
     @GetMapping
-    public ResponseEntity<List<MovimentacaoVacina>> getAllMovimentacoes() {
-        List<MovimentacaoVacina> movimentacoes = movimentacaoVacinaService.getAllMovimentacoes();
-        return ResponseEntity.ok(movimentacoes);
+    public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoes() {
+        return ResponseEntity.ok(movimentacaoVacinaService.getAllMovimentacoes());
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<MovimentacaoVacina> getMovimentacaoById(@PathVariable Long id) {
+    public ResponseEntity<MovimentacaoVacinaResponse> getMovimentacaoById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaService.getMovimentacaoById(id));
+    }
 
-        MovimentacaoVacina movimentacao = movimentacaoVacinaService.getMovimentacaoById(id);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacao);
+    @Override
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<MovimentacaoVacinaResponse>> getMovimentacaoByIdUsuario(@PathVariable Long id) {
+        return  ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaService.getAlltMovimentacaoByUsuarioId(id));
     }
 
     @Override

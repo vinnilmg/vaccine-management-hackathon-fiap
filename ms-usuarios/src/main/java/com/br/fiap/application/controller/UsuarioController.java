@@ -1,16 +1,19 @@
 package com.br.fiap.application.controller;
 
 import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
+import com.br.fiap.application.dto.response.UsuarioResponse;
 import com.br.fiap.core.model.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@Tag(name ="Usuario", description ="Operações relacionadas a usuários")
+@Tag(name = "Usuario", description = "Operações relacionadas a usuários")
 
 public interface UsuarioController {
 
@@ -33,7 +36,7 @@ public interface UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
-    ResponseEntity<Usuario> getUsuarioById(Long id);
+    ResponseEntity<UsuarioResponse> getUsuarioById(Long id);
 
     @Operation(
             summary = "Criar um novo usuário",
@@ -68,5 +71,16 @@ public interface UsuarioController {
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
     ResponseEntity<Void> deleteUsuario(Long id);
+
+    @Operation(
+            summary = "Buscar Movimentacoes de vacina a partir do vacina ID e do usuário ID",
+            description = "Retorna todas as movimentações referente há vacina e usuário."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Movimentação encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
+    })
+    ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoesVacinByVacinaIdAndUserId(@PathVariable Long id, @PathVariable Long idVacina);
 
 }

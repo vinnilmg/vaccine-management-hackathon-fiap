@@ -20,14 +20,12 @@ public class MovimentacaoVacina {
 
      private Integer sequence;
 
-     private String identificadorVacina;
+     private Long vacinaId;
 
      private LocalDate dataAplicacao;
 
-     private String identificadorLocal;
+     private Long localId;
 
      private Usuario usuario;
-
-     private Dependente dependente;
 
 }

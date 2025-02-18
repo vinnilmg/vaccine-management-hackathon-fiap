@@ -1,9 +1,10 @@
 package com.br.fiap.application.dto.request;
 
 import com.br.fiap.core.enums.TipoPacienteEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record UsuarioRequest(Long id,
 
                              String nome,
@@ -20,5 +21,7 @@ public record UsuarioRequest(Long id,
 
                              String numeroCarteirinhaSUS,
 
-                             TipoPacienteEnum tipo) {
+                             TipoPacienteEnum tipo,
+                             EnderecoRequest endereco,
+                             Long dependenteDeId) {
 }

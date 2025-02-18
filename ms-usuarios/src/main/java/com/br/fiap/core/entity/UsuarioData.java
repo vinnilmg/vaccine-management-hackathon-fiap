@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -48,7 +49,7 @@ public class UsuarioData {
     @Column
     private String telefone;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "endereco_id")
     private EnderecoData endereco;
 
@@ -62,9 +63,13 @@ public class UsuarioData {
     @Column
     private TipoPacienteEnum tipo;
 
-    @OneToMany(mappedBy = "titular", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<DependenteData> dependentes;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dependente_id")
+    private UsuarioData dependenteDe;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "dependenteDe", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List<UsuarioData> dependentes;
+
+    @OneToMany(mappedBy = "usuario",cascade = CascadeType.PERSIST ,fetch = FetchType.EAGER)
     private List<MovimentacaoVacinaData> movimentacaoVacinal;
 }
