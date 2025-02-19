@@ -1,18 +1,14 @@
 package com.fiap.hackathon.ms_postos_vacina.controller;
 
+import com.fiap.hackathon.ms_postos_vacina.controller.request.LoteRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoRequest;
+import com.fiap.hackathon.ms_postos_vacina.controller.response.LoteResponse;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.PostoResponse;
 import com.fiap.hackathon.ms_postos_vacina.service.PostoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +39,32 @@ public class PostoController {
                 .body(postoService.criaPosto(request));
     }
 
+    @PostMapping("/criar-lote")
+    public ResponseEntity<LoteResponse> criaLote(@RequestBody LoteRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postoService.criaLote(request));
+    }
+
+    @PutMapping("/{idPosto}/lotes/{idlote}/aumentar-etoque")
+    public ResponseEntity<Void> aumentarEstoque(@PathVariable Long idPosto, @PathVariable String idlote) {
+        postoService.aumentarEstoque(idPosto, idlote);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{idPosto}/lotes/{idlote}/diminuir-estoque")
+    public ResponseEntity<Void> diminuirEstoque(@PathVariable Long idPosto, @PathVariable String idlote) {
+        postoService.diminuirEstoque(idPosto, idlote);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{idPosto}/lotes/{idlote}")
+    public ResponseEntity<LoteResponse> buscaPosto(@PathVariable Long idPosto, @PathVariable String idlote) {
+        return ResponseEntity.ok(postoService.buscaPostoLote(idPosto, idlote));
+    }
+
+    @GetMapping("/nr-lote/{idlote}")
+    public ResponseEntity<List<LoteResponse>> buscaNrLote(@PathVariable String idlote) {
+        return ResponseEntity.ok(postoService.buscaNrLote(idlote));
+    }
 
 }
