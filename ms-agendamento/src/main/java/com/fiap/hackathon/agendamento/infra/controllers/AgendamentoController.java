@@ -17,6 +17,7 @@ import com.fiap.hackathon.agendamento.application.usecases.impl.FinalizarAgendam
 import com.fiap.hackathon.agendamento.infra.controllers.mappers.AgendamentoResponseMapper;
 import com.fiap.hackathon.agendamento.infra.controllers.request.AgendamentoRequest;
 import com.fiap.hackathon.agendamento.infra.controllers.response.AgendamentoResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
+@Tag(name = "Agendamento", description = "API de Agendamentos")
 @RestController
 @RequestMapping("/agendamentos")
 public class AgendamentoController {
