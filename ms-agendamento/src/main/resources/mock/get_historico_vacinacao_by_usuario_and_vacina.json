@@ -12,9 +12,9 @@
       "historico": [
         {
           "id": 1,
-          "vacina": 2,
-          "data": "2025-01-01",
-          "local": 1
+          "vacinaId": 2,
+          "dataAplicacao": "2025-01-01",
+          "localId": 1
         }
       ]
     }
