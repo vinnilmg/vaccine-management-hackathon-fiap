@@ -12,8 +12,8 @@
       "id": 2,
       "nome": "Coronavírus",
       "fabricante": "Pfizer",
-      "doses": 5,
-      "intervalo": 180
+      "numeroDoses": 5,
+      "intervaloDoses": 180
     }
   }
 }
