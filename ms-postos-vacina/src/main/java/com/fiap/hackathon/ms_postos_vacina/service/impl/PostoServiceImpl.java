@@ -9,7 +9,6 @@ import com.fiap.hackathon.ms_postos_vacina.repository.EnderecoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.FuncionamentoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.PostoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.EnderecoEntity;
-import com.fiap.hackathon.ms_postos_vacina.repository.entity.FuncionamentoEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.PostoEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.EnderecoMapper;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.FuncionamentoMapper;
@@ -67,20 +66,14 @@ public class PostoServiceImpl implements PostoService {
     @Override
     public PostoResponse criaPosto(PostoRequest request) {
         EnderecoEntity endereco = enderecoMapper.toEndereco(request.endereco());
-
         PostoEntity posto = postoMapper.toPosto(request);
+
+        // TODO: Alterar para que o endereço que tenha o ID do posto e nao ao contrário
+        // TODO: O endereço que depende do cadastro do posto e não ao contrário
         posto.setEndereco(endereco);
+        posto.getFuncionamento().forEach(f -> f.setPosto(posto));
 
         PostoEntity postoSaved = postoRepository.save(posto);
-
-        List<FuncionamentoEntity> funcionamentoList = funcionamentoMapper.toFuncionamentoList(request.funcionamento());
-        funcionamentoList.forEach(f -> f.setPosto(postoSaved));
-
-        List<FuncionamentoEntity> funcionamentoSaved = funcionamentoRepository.saveAll(funcionamentoList);
-
-        postoSaved.setFuncionamento(funcionamentoSaved);
-        postoRepository.save(postoSaved);
-
         return postoResponseMapper.toPostoResponse(postoSaved);
     }
 

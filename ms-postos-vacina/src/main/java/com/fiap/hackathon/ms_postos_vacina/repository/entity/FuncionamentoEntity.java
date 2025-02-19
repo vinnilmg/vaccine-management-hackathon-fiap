@@ -29,7 +29,7 @@ public class FuncionamentoEntity {
     @NotBlank
     private String horarioFim;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "posto_id", nullable = false)
     private PostoEntity posto;
 }
