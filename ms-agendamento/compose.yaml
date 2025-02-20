@@ -1,0 +1,21 @@
+name: ms-agendamento
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    networks:
+      - agendamento-network
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: agendamento_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+
+networks:
+  agendamento-network:
+    driver: bridge

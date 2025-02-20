@@ -1,0 +1,35 @@
+name: vaccine-management
+
+services:
+  ms-agendamento-db:
+    image: postgres:latest
+    restart: always
+    networks:
+      - vaccine-management-network
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: agendamento_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+
+  ms-agendamento-api:
+    image: ms-agendamento:latest
+    build: ./ms-agendamento
+    networks:
+      - vaccine-management-network
+    depends_on:
+      - ms-agendamento-db
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: prd
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ms-agendamento-db:5432/agendamento_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+
+networks:
+  vaccine-management-network:
+    driver: bridge

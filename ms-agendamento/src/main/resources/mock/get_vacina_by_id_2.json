@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/vacinas/2"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": 2,
+      "nome": "Coronavírus",
+      "fabricante": "Pfizer",
+      "numeroDoses": 5,
+      "intervaloDoses": 180
+    }
+  }
+}
