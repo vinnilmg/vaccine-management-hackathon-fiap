@@ -68,7 +68,7 @@ public class UsuarioData {
     private UsuarioData dependenteDe;
 
     @OneToMany(mappedBy = "dependenteDe", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<UsuarioData> dependentes;
+    private List<UsuarioData> dependentesList;
 
     @OneToMany(mappedBy = "usuario",cascade = CascadeType.PERSIST ,fetch = FetchType.EAGER)
     private List<MovimentacaoVacinaData> movimentacaoVacinal;

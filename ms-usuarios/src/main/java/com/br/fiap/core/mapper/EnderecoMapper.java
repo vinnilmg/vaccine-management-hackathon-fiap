@@ -27,4 +27,5 @@ public class EnderecoMapper {
         }
         return typeMap.map(endereco);
     }
+
 }

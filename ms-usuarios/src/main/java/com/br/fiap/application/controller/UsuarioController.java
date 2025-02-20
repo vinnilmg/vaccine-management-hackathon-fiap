@@ -25,7 +25,7 @@ public interface UsuarioController {
             @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
-    ResponseEntity<List<Usuario>> getAllUsuarios();
+    ResponseEntity<List<UsuarioResponse>> getAllUsuarios();
 
     @Operation(
             summary = "Buscar usuário por ID",
@@ -47,7 +47,7 @@ public interface UsuarioController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
-    ResponseEntity<Usuario> createUsuario(UsuarioRequest usuarioRequest);
+    ResponseEntity<UsuarioResponse> createUsuario(UsuarioRequest usuarioRequest);
 
     @Operation(
             summary = "Atualizar um usuário",
@@ -59,7 +59,7 @@ public interface UsuarioController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
-    ResponseEntity<Usuario> updateUsuario(Long id, UsuarioRequest usuarioRequest);
+    ResponseEntity<UsuarioResponse> updateUsuario(Long id, UsuarioRequest usuarioRequest);
 
     @Operation(
             summary = "Excluir um usuário",

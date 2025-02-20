@@ -7,6 +7,7 @@ import com.br.fiap.application.service.MovimentacaoVacinaService;
 import com.br.fiap.core.entity.EnderecoData;
 import com.br.fiap.core.enums.TipoPacienteEnum;
 import com.br.fiap.core.mapper.EnderecoMapper;
+import com.br.fiap.core.mapper.MovimentacaoVacinaMapper;
 import com.br.fiap.core.mapper.UsuarioMapper;
 import com.br.fiap.application.dto.request.UsuarioRequest;
 import com.br.fiap.application.exception.NotFoundException;
@@ -36,78 +37,46 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final EnderecoService enderecoService;
 
+    private final MovimentacaoVacinaMapper movimentacaoVacinaMapper;
+
     private final EnderecoMapper enderecoMapper;
 
     @Override
-    public List<Usuario> getAll() {
+    public List<UsuarioResponse> getAll() {
         return usuarioRepository.findAll()
                 .stream()
-                .map(usuarioMapper::toModel)
+                .map(usuarioMapper::toResponse)
                 .toList();
     }
 
     public List<MovimentacaoVacinaResponse> getAllMovimentacoesVacinByVacinaIdAndUserId(Long id, Long vacinaId) {
-        Usuario usuarioData = usuarioRepository.findById(id)
-                .map(usuarioMapper::toModel)
-                .orElseThrow(() -> new NotFoundException(String.format("Usuario com ID %s não encontrado", id)));
+        Usuario usuario =   findById(id);
 
-        return usuarioData.getMovimentacaoVacinal().stream()
+        return usuario.getMovimentacaoVacinal().stream()
                 .filter(movimentacao -> movimentacao.getVacinaId().equals(vacinaId))
-                .map(movimentacaoVacina -> MovimentacaoVacinaResponse.builder()
-                        .id(movimentacaoVacina.getId())
-                        .vacinaId(movimentacaoVacina.getVacinaId())
-                        .sequence(movimentacaoVacina.getSequence())
-                        .dataAplicacao(movimentacaoVacina.getDataAplicacao())
-                        .localId(movimentacaoVacina.getLocalId())
-                        .usuarioId(movimentacaoVacina.getUsuario().getId())
-                        .build())
+                .map(movimentacaoVacinaMapper::toResponse)
                 .toList();
-
     }
 
     @Override
     public UsuarioResponse getById(Long id) {
-        Usuario usuarioData = usuarioRepository.findById(id)
+        Usuario usuarioData = findById(id);
+        return usuarioMapper.toResponse(usuarioData);
+    }
+
+    @Override
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id)
                 .map(usuarioMapper::toModel)
                 .orElseThrow(() -> new NotFoundException(String.format("Usuario com ID %s não encontrado", id)));
-
-        List<Long> dependentesId = new ArrayList<>();
-
-        usuarioData.getDependentes().stream().forEach(usuario -> dependentesId.add(usuario.getId()));
-
-        if (usuarioData.getTipo().equals(TipoPacienteEnum.TITULAR)) {
-            return UsuarioResponse.builder()
-                    .dependentesId(dependentesId)
-                    .nome(usuarioData.getNome())
-                    .cpf(usuarioData.getCpf())
-                    .telefone(usuarioData.getTelefone())
-                    .email(usuarioData.getEmail())
-                    .dataNascimento(usuarioData.getDataNascimento())
-                    .tipo(usuarioData.getTipo())
-                    .numeroCarteirinhaSUS(usuarioData.getNumeroCarteirinhaSUS())
-                    .build();
-        }
-
-        return UsuarioResponse.builder()
-                .dependentesId(dependentesId)
-                .nome(usuarioData.getNome())
-                .cpf(usuarioData.getCpf())
-                .telefone(usuarioData.getTelefone())
-                .email(usuarioData.getEmail())
-                .dependenteDeId(usuarioData.getDependenteDe().getId())
-                .dataNascimento(usuarioData.getDataNascimento())
-                .tipo(usuarioData.getTipo())
-                .numeroCarteirinhaSUS(usuarioData.getNumeroCarteirinhaSUS())
-                .build();
     }
 
     @Override
     @Transactional
-    public Usuario create(UsuarioRequest usuarioRequest) {
-
+    public UsuarioResponse create(UsuarioRequest usuarioRequest) {
         UsuarioData usuarioData = getUsuarioDataByTipoPessoa(usuarioRequest);
         usuarioData = usuarioRepository.save(usuarioData);
-        return usuarioMapper.toModel(usuarioData);
+        return usuarioMapper.toResponse(usuarioData);
     }
 
     public UsuarioData getUsuarioDataByTipoPessoa(UsuarioRequest usuarioRequest) {
@@ -153,7 +122,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    public Usuario update(Long id, UsuarioRequest usuarioModel) {
+    public UsuarioResponse update(Long id, UsuarioRequest usuarioModel) {
         UsuarioData usuarioData = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         usuarioData.setCpf(usuarioModel.cpf());
@@ -162,14 +131,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioData.setTipo(usuarioModel.tipo());
         usuarioData.setNumeroCarteirinhaSUS(usuarioModel.numeroCarteirinhaSUS());
         UsuarioData updatedUsuario = usuarioRepository.save(usuarioData);
-        return usuarioMapper.toModel(updatedUsuario);
+        return usuarioMapper.toResponse(updatedUsuario);
     }
 
     @Override
     public void validateUserTitularAge(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .map(usuarioMapper::toModel)
-                .orElseThrow(() -> new NotFoundException(String.format("Usuario com ID %s não encontrado", id)));
+        Usuario usuario = findById(id);
         if (DataUtils.calculateYearBorn(usuario.getDataNascimento()) < 18) {
             throw new ValidationException("dataNascimento", String.format("Usuário titular ID %s não pode ser cadastrado. nome %s , não tem 18 anos de idade", id, usuario.getNome()));
         }

@@ -9,15 +9,18 @@ import java.util.List;
 
 public interface UsuarioService {
 
-    List<Usuario> getAll();
+    List<UsuarioResponse> getAll();
 
     UsuarioResponse getById(Long id);
 
-    public List<MovimentacaoVacinaResponse> getAllMovimentacoesVacinByVacinaIdAndUserId(Long userId,Long vacinaId);
+    Usuario findById(Long id);
 
-    Usuario create(UsuarioRequest usuarioModel);
+    List<MovimentacaoVacinaResponse> getAllMovimentacoesVacinByVacinaIdAndUserId(Long userId,Long vacinaId);
 
-    Usuario update(Long id, UsuarioRequest usuarioModel);
+
+    UsuarioResponse create(UsuarioRequest usuarioModel);
+
+    UsuarioResponse update(Long id, UsuarioRequest usuarioModel);
 
     void validateUserTitularAge(Long id);
 

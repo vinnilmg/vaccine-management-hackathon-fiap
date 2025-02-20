@@ -5,7 +5,6 @@ import com.br.fiap.application.dto.request.UsuarioRequest;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
 import com.br.fiap.application.dto.response.UsuarioResponse;
 import com.br.fiap.application.service.UsuarioService;
-import com.br.fiap.core.model.Usuario;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,8 @@ public class UsuarioControllerImpl implements UsuarioController {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<Usuario>> getAllUsuarios() {
-        List<Usuario> usuarios = usuarioService.getAll();
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<List<UsuarioResponse>> getAllUsuarios() {
+        return ResponseEntity.ok(usuarioService.getAll());
     }
 
     @Override
@@ -43,15 +41,15 @@ public class UsuarioControllerImpl implements UsuarioController {
 
     @Override
     @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody UsuarioRequest usuarioRequest) {
-        Usuario usuario = usuarioService.create(usuarioRequest);
+    public ResponseEntity<UsuarioResponse> createUsuario(@RequestBody UsuarioRequest usuarioRequest) {
+        UsuarioResponse usuario = usuarioService.create(usuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @RequestBody UsuarioRequest usuarioRequest) {
-        Usuario usuario = usuarioService.update(id, usuarioRequest);
+    public ResponseEntity<UsuarioResponse> updateUsuario(@PathVariable Long id, @RequestBody UsuarioRequest usuarioRequest) {
+        UsuarioResponse usuario = usuarioService.update(id, usuarioRequest);
         return ResponseEntity.ok(usuario);
     }
 

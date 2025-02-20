@@ -40,7 +40,7 @@ public class Usuario {
 
     private Usuario dependenteDe;
 
-    private List<Usuario> dependentes;
+    private List<Usuario> dependentesList;
 
     private List<MovimentacaoVacina> movimentacaoVacinal;
 }

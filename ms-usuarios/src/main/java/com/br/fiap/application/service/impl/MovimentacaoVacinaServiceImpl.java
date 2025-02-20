@@ -30,45 +30,29 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
     public List<MovimentacaoVacinaResponse> getAllMovimentacoes() {
         return movimentacaoVacinaRepository.findAll()
                 .stream()
-                .map(movimentacao -> MovimentacaoVacinaResponse.builder()
-                        .id(movimentacao.getId())
-                        .sequence(movimentacao.getSequence())
-                        .dataAplicacao(movimentacao.getDataAplicacao())
-                        .usuarioId(movimentacao.getUsuario().getId())
-                        .build()
-                )
+                .map(movimentacaoVacinaMapper::toResponse)
                 .toList();
 
     }
 
     @Override
-    public MovimentacaoVacinaResponse getMovimentacaoById(Long id) {
-
-        MovimentacaoVacina movimentacaoVacina = movimentacaoVacinaRepository.findById(id)
+    public MovimentacaoVacina findById(Long id) {
+        return movimentacaoVacinaRepository.findById(id)
                 .map(movimentacaoVacinaMapper::toModel)
                 .orElseThrow(() -> new NotFoundException(String.format("Movimentação Vacina com o ID %s não encontrada", id)));
 
-        return MovimentacaoVacinaResponse.builder()
-                .id(movimentacaoVacina.getId())
-                .sequence(movimentacaoVacina.getSequence())
-                .dataAplicacao(movimentacaoVacina.getDataAplicacao())
-                .localId(movimentacaoVacina.getLocalId())
-                .usuarioId(movimentacaoVacina.getUsuario().getId())
-                .build();
     }
 
+    @Override
+    public MovimentacaoVacinaResponse getMovimentacaoById(Long id) {
+        MovimentacaoVacina movimentacaoVacina = findById(id);
+        return movimentacaoVacinaMapper.toResponse(movimentacaoVacina);
+    }
     @Override
     public List<MovimentacaoVacinaResponse> getAlltMovimentacaoByUsuarioId(Long idUsuario) {
         return movimentacaoVacinaRepository.findAllByUsuarioId(idUsuario)
                 .stream()
-                .map(movimentacaoVacina -> MovimentacaoVacinaResponse.builder()
-                        .id(movimentacaoVacina.getId())
-                        .sequence(movimentacaoVacina.getSequence())
-                        .vacinaId( movimentacaoVacina.getVacinaId())
-                        .dataAplicacao(movimentacaoVacina.getDataAplicacao())
-                        .localId(movimentacaoVacina.getLocalId())
-                        .usuarioId(movimentacaoVacina.getUsuario().getId())
-                        .build())
+                .map(movimentacaoVacinaMapper::toResponse)
                 .toList();
     }
 
@@ -88,14 +72,7 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
 
         MovimentacaoVacinaData movimentacaoVacinaData = movimentacaoVacinaRepository.save(movimentacaoVacinaMapper.toData(movimentacaoVacina));
 
-        return MovimentacaoVacinaResponse.builder()
-                .id(movimentacaoVacinaData.getId())
-                .sequence(movimentacaoVacinaData.getSequence())
-                .vacinaId(movimentacaoVacinaRequest.vacinaId())
-                .dataAplicacao(movimentacaoVacinaData.getDataAplicacao())
-                .localId(movimentacaoVacinaRequest.localId())
-                .usuarioId(movimentacaoVacinaData.getUsuario().getId())
-                .build();
+        return movimentacaoVacinaMapper.toResponse(movimentacaoVacinaData);
     }
 
     @Override
@@ -117,13 +94,7 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
 
         MovimentacaoVacinaData movimentacaoVacinaData = movimentacaoVacinaRepository.save(movimentacaoVacinaMapper.toData(movimentacaoVacina));
 
-        return MovimentacaoVacinaResponse.builder()
-                .sequence(movimentacaoVacinaData.getSequence())
-                .vacinaId(movimentacaoVacinaData.getVacinaId())
-                .dataAplicacao(movimentacaoVacinaData.getDataAplicacao())
-                .localId(movimentacaoVacinaData.getLocalId())
-                .usuarioId(movimentacaoVacinaData.getUsuario().getId())
-                .build();
+        return movimentacaoVacinaMapper.toResponse(movimentacaoVacinaData);
     }
 
     @Override

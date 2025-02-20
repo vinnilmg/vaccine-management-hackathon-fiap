@@ -2,28 +2,38 @@ package com.br.fiap.application.dto.response;
 
 import com.br.fiap.core.enums.TipoPacienteEnum;
 import com.br.fiap.core.model.Endereco;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder
-public record UsuarioResponse( String nome,
+public class UsuarioResponse {
 
-         String cpf,
+    private String nome;
 
-         String email,
+    private String cpf;
 
-         String telefone,
+    private String email;
 
-         Endereco endereco,
+    private String telefone;
 
-         LocalDate dataNascimento,
+    private Long enderecoId;
 
-         String numeroCarteirinhaSUS,
+    private LocalDate dataNascimento;
 
-         TipoPacienteEnum tipo,
+    private String numeroCarteirinhaSUS;
 
-         Long dependenteDeId,
+    private TipoPacienteEnum tipo;
 
-         List<Long>dependentesId) {
+    private Long dependenteDeId;
+
+    private List<Long> dependentesListid;
 }
