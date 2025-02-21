@@ -39,8 +39,7 @@ public class PostoEntity {
     private String nome;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "posto", fetch = FetchType.EAGER)
     private EnderecoEntity endereco;
 
     @Enumerated(EnumType.STRING)

@@ -3,6 +3,7 @@ package com.fiap.hackathon.ms_postos_vacina.controller;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.LoteRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.LoteResponse;
+import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoUpdateRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.PostoResponse;
 import com.fiap.hackathon.ms_postos_vacina.service.PostoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,12 @@ public class PostoController {
     public ResponseEntity<List<LoteResponse>> buscaNrLote(@PathVariable String idlote) {
         return ResponseEntity.ok(postoService.buscaNrLote(idlote));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<PostoResponse> atualizaPosto(@PathVariable Long id,
+                                                       @RequestBody PostoUpdateRequest request) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(postoService.atualizaPosto(id, request));
+    }
+
 
 }
