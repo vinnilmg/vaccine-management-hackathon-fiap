@@ -46,25 +46,25 @@ public class PostoController {
                 .body(postoService.criaLote(request));
     }
 
-    @PutMapping("/{idPosto}/lotes/{idlote}/aumentar-etoque")
-    public ResponseEntity<Void> aumentarEstoque(@PathVariable Long idPosto, @PathVariable String idlote) {
-        postoService.aumentarEstoque(idPosto, idlote);
+    @PutMapping("/{idPosto}/vacinas/{vacinaid}/lote/aumentar-etoque")
+    public ResponseEntity<Void> aumentarEstoque(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+        postoService.aumentarEstoque(idPosto, vacinaid);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{idPosto}/lotes/{idlote}/diminuir-estoque")
-    public ResponseEntity<Void> diminuirEstoque(@PathVariable Long idPosto, @PathVariable String idlote) {
-        postoService.diminuirEstoque(idPosto, idlote);
+    @PutMapping("/{idPosto}/vacinas/{vacinaid}/lote/diminuir-estoque")
+    public ResponseEntity<Void> diminuirEstoque(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+        postoService.diminuirEstoque(idPosto, vacinaid);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{idPosto}/lotes/{idlote}")
-    public ResponseEntity<LoteResponse> buscaPosto(@PathVariable Long idPosto, @PathVariable String idlote) {
-        return ResponseEntity.ok(postoService.buscaPostoLote(idPosto, idlote));
+    @GetMapping("/{idPosto}/vacinas/{vacinaid}/lote")
+    public ResponseEntity<LoteResponse> buscaPosto(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+        return ResponseEntity.ok(postoService.buscaPostoLote(idPosto, vacinaid));
     }
 
-    @GetMapping("/nr-lote/{idlote}")
-    public ResponseEntity<List<LoteResponse>> buscaNrLote(@PathVariable String idlote) {
+    @GetMapping("/lotes/numero/{idlote}")
+    public ResponseEntity<LoteResponse> buscaNrLote(@PathVariable String idlote) {
         return ResponseEntity.ok(postoService.buscaNrLote(idlote));
     }
     @PutMapping("/{id}")

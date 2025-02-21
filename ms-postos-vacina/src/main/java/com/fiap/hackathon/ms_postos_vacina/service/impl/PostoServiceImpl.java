@@ -7,10 +7,7 @@ import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoUpdateRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.LoteResponse;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.PostoResponse;
-import com.fiap.hackathon.ms_postos_vacina.exception.DataInvalidaException;
-import com.fiap.hackathon.ms_postos_vacina.exception.EstoqueInvalidoException;
-import com.fiap.hackathon.ms_postos_vacina.exception.PostoNotFoundException;
-import com.fiap.hackathon.ms_postos_vacina.exception.SemEstoqueDisponivelException;
+import com.fiap.hackathon.ms_postos_vacina.exception.*;
 import com.fiap.hackathon.ms_postos_vacina.repository.EnderecoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.FuncionamentoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.LoteRepository;
@@ -129,33 +126,38 @@ public class PostoServiceImpl implements PostoService {
     }
 
     @Override
-    public void aumentarEstoque(Long idPosto, String idLote) {
-        LoteEntity lote = loteRepository.findByPostoVacinacaoIdAndNumero(idPosto, idLote);
+    public void aumentarEstoque(Long idPosto, Long vacinaId) {
+        var loteOp = loteRepository.findByPostoVacinacaoIdAndVacinaId(idPosto, vacinaId);
+        if(loteOp.isEmpty()) throw new PostoVacinaNotFoundException();
+
+        var lote = loteOp.get();
         lote.setEstoque(lote.getEstoque() + 1) ;
         loteRepository.save(lote);
     }
 
     @Override
-    public void diminuirEstoque(Long idPosto, String idLote) {
-        LoteEntity lote = loteRepository.findByPostoVacinacaoIdAndNumero(idPosto, idLote);
-        //se estoque estiver zerado não reduz
-        if (lote.getEstoque() == 0) {
-            throw new SemEstoqueDisponivelException();
-        }
+    public void diminuirEstoque(Long idPosto, Long vacinaId) {
+        var loteOp = loteRepository.findByPostoVacinacaoIdAndVacinaId(idPosto, vacinaId);
+        if(loteOp.isEmpty()) throw new PostoVacinaNotFoundException();
+
+        var lote = loteOp.get();
         lote.setEstoque(lote.getEstoque() - 1) ;
         loteRepository.save(lote);
     }
 
     @Override
-    public LoteResponse buscaPostoLote(Long idPosto, String idLote) {
-        return loteResponseMapper.toLoteResponse(loteRepository.findByPostoVacinacaoIdAndNumero(idPosto, idLote));
+    public LoteResponse buscaPostoLote(Long idPosto, Long vacinaId) {
+        var registro = loteRepository.findByPostoVacinacaoIdAndVacinaId(idPosto, vacinaId);
+
+        if (registro.isEmpty()) throw new PostoVacinaNotFoundException();
+        return loteResponseMapper.toLoteResponse(registro.get());
     }
 
     @Override
-    public List<LoteResponse> buscaNrLote(String idLote) {
-        return loteRepository.findByNumero(idLote)
-                .stream()
-                .map(loteResponseMapper::toLoteResponse)
-                .toList();
+    public LoteResponse buscaNrLote(String idLote) {
+        var registro = loteRepository.findByNumero(idLote);
+
+        if (registro.isEmpty()) throw new LoteNotFoundException();
+        return loteResponseMapper.toLoteResponse(registro.get());
     }
 }

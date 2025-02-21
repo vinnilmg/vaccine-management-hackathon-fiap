@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LoteRepository extends JpaRepository<LoteEntity, Long> {
-    LoteEntity findByPostoVacinacaoIdAndNumero(Long postoVacinacaoId, String numero);
+    Optional<LoteEntity> findByPostoVacinacaoIdAndVacinaId(Long postoVacinacaoId, Long vacinaId);
 
-    List<LoteEntity> findByNumero(String numero);
+    Optional<LoteEntity> findByNumero(String numero);
 }

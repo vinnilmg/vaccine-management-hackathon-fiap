@@ -21,11 +21,11 @@ public interface PostoService {
 
     LoteResponse criaLote(LoteRequest request);
 
-    void aumentarEstoque(Long idPosto, String idLote);
+    void aumentarEstoque(Long idPosto, Long vacinaId);
 
-    void diminuirEstoque(Long idPosto, String idLote);
+    void diminuirEstoque(Long idPosto, Long vacinaId);
 
-    LoteResponse buscaPostoLote(Long idPosto, String idLote);
+    LoteResponse buscaPostoLote(Long idPosto, Long vacinaId);
 
-    List<LoteResponse> buscaNrLote(String idLote);
+    LoteResponse buscaNrLote(String idLote);
 }
