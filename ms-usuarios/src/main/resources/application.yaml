@@ -1,0 +1,30 @@
+application:
+  name: ms-usuarios
+
+server:
+  port: 8082  # Porta da aplicação
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:msusuariosdb  # URL do banco de dados H2 em memória
+    driver-class-name: org.h2.Driver  # Driver do H2
+    username: root  # Usuário padrão do H2
+    password: root  # Senha padrão do H2
+  h2:
+    console:
+      enabled: true  # Habilita o console do H2
+      path: /h2-console  # Caminho para acessar o console do H2
+      settings:
+        trace: false  # Desabilita o trace no console
+        web-allow-others: false  # Impede que outros acessem o console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect  # Dialeto do H2 para o JPA
+    hibernate:
+      ddl-auto: update  # Configura o Hibernate para atualizar o schema automaticamente
+    show-sql: true  # Mostra as queries SQL no console
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
