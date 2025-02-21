@@ -13,15 +13,15 @@ public interface PostoVacinacaoClient {
     @GetMapping(value = "/postos/{postoVacinacaoId}", produces = "application/json")
     PostoVacinacaoResponse getPostoVacinacaoById(@PathVariable Long postoVacinacaoId);
 
-    @GetMapping(value = "/postos/{postoVacinacaoId}/lotes/{vacinaId}", produces = "application/json")
+    @GetMapping(value = "/postos/{postoVacinacaoId}/vacinas/{vacinaId}/lote", produces = "application/json")
     LoteVacinaResponse getLoteByPostoVacinacaoIdAndVacinaId(
         @PathVariable Long postoVacinacaoId,
         @PathVariable Long vacinaId
     );
 
-    @PutMapping(value = "/postos/{postoVacinacaoId}/lotes/{vacinaId}/diminuir-estoque")
+    @PutMapping(value = "/postos/{postoVacinacaoId}/vacinas/{vacinaId}/lote/diminuir-estoque")
     void decreaseStock(@PathVariable Long postoVacinacaoId, @PathVariable Long vacinaId);
 
-    @PutMapping(value = "/postos/{postoVacinacaoId}/lotes/{vacinaId}/aumentar-estoque")
+    @PutMapping(value = "/postos/{postoVacinacaoId}/vacinas/{vacinaId}/lote/aumentar-estoque")
     void increaseStock(@PathVariable Long postoVacinacaoId, @PathVariable Long vacinaId);
 }

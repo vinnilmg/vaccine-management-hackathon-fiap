@@ -66,4 +66,14 @@ public class LoteDomain implements Lote {
     public boolean containsEstoque() {
         return estoque > 0;
     }
+
+    @Override
+    public boolean isExpired(final LocalDate dataAgendamento) {
+        return dataAgendamento.isAfter(validade);
+    }
+
+    @Override
+    public boolean isNoExpired(final LocalDate dataAgendamento) {
+        return !isExpired(dataAgendamento);
+    }
 }

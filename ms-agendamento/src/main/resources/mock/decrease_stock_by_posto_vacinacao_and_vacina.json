@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "PUT",
-    "url": "/postos/1/lotes/2/diminuir-estoque"
+    "url": "/postos/1/vacinas/2/lote/diminuir-estoque"
   },
   "response": {
     "status": 204,

@@ -2,6 +2,8 @@ package com.fiap.hackathon.agendamento.domain.entities.agendamento;
 
 import com.fiap.hackathon.agendamento.infra.persistence.entities.enums.StatusAgendamento;
 
+import java.time.LocalDateTime;
+
 public interface Agendamento {
     Long getId();
 
@@ -26,4 +28,6 @@ public interface Agendamento {
     void cancelar();
 
     void finalizar();
+
+    boolean isSameDay(LocalDateTime dataAgendamento);
 }
