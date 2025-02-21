@@ -24,6 +24,12 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
             StatusAgendamento status
     );
 
+    Optional<AgendamentoEntity> findByUsuarioIdAndVacinaIdNotAndStatus(
+            Long usuarioId,
+            Long vacinaId,
+            StatusAgendamento status
+    );
+
     @Transactional
     @Modifying
     @Query("update AgendamentoEntity a set a.status = :status where a.id = :id")

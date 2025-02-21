@@ -1,6 +1,7 @@
 package com.fiap.hackathon.agendamento.application.usecases.impl;
 
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.CreateAgendamentoGateway;
+import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindConfirmedByUsuarioAndDifferentVacinaGateway;
 import com.fiap.hackathon.agendamento.application.gateway.agendamento.FindConfirmedByUsuarioAndVacinaGateway;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.DecreaseStockByPostoVacinacaoAndVacinaIdGateway;
 import com.fiap.hackathon.agendamento.application.gateway.posto.vacinacao.FindLoteByPostoVacinacaoAndVacinaIdGateway;
@@ -10,12 +11,12 @@ import com.fiap.hackathon.agendamento.application.gateway.usuario.FindUsuarioByI
 import com.fiap.hackathon.agendamento.application.gateway.vacina.FindVacinaByIdGateway;
 import com.fiap.hackathon.agendamento.application.usecases.CriarAgendamentoUseCase;
 import com.fiap.hackathon.agendamento.domain.entities.agendamento.Agendamento;
-import com.fiap.hackathon.agendamento.domain.exceptions.AgendamentoAlreayExistsException;
 import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationException;
 import com.fiap.hackathon.agendamento.domain.exceptions.NotFoundException;
 import com.fiap.hackathon.agendamento.infra.controllers.mappers.AgendamentoRequestMapper;
 import com.fiap.hackathon.agendamento.infra.controllers.request.AgendamentoRequest;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.CreateAgendamentoDatabaseGateway;
+import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindConfirmedByUsuarioAndDifferentVacinaDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.agendamento.FindConfirmedByUsuarioAndVacinaDatabaseGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.DecreaseStockByPostoVacinacaoAndVacinaIdProviderGateway;
 import com.fiap.hackathon.agendamento.infra.gateways.posto.vacinacao.FindLoteByPostoVacinacaoAndVacinaIdProviderGateway;
@@ -25,9 +26,13 @@ import com.fiap.hackathon.agendamento.infra.gateways.usuario.FindUsuarioByIdProv
 import com.fiap.hackathon.agendamento.infra.gateways.vacina.FindVacinaByIdProviderGateway;
 import org.springframework.stereotype.Service;
 
+import static com.fiap.hackathon.agendamento.domain.exceptions.AgendamentoAlreadyExistsException.ofAlreadyExistsBySameDay;
+import static com.fiap.hackathon.agendamento.domain.exceptions.AgendamentoAlreadyExistsException.ofAlreadyExistsByUserAndVacina;
+
 @Service
 public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
     private final FindConfirmedByUsuarioAndVacinaGateway findConfirmedByUsuarioAndVacinaGateway;
+    private final FindConfirmedByUsuarioAndDifferentVacinaGateway findConfirmedByUsuarioAndDifferentVacinaGateway;
     private final FindUsuarioByIdGateway findUsuarioByIdGateway;
     private final FindPostoVacinacaoByIdGateway findPostoVacinacaoByIdGateway;
     private final AgendamentoRequestMapper agendamentoRequestMapper;
@@ -39,6 +44,7 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
 
     public CriarAgendamentoUseCaseImpl(
             FindConfirmedByUsuarioAndVacinaDatabaseGateway findByUsuarioAndVacinaGateway,
+            FindConfirmedByUsuarioAndDifferentVacinaDatabaseGateway findConfirmedByUsuarioAndDifferentVacinaGateway,
             FindUsuarioByIdProviderGateway findUsuarioByIdGateway,
             FindPostoVacinacaoByIdProviderGateway findPostoVacinacaoByIdGateway,
             AgendamentoRequestMapper agendamentoRequestMapper,
@@ -49,6 +55,7 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
             DecreaseStockByPostoVacinacaoAndVacinaIdProviderGateway decreaseStockByLoteIdGateway
     ) {
         this.findConfirmedByUsuarioAndVacinaGateway = findByUsuarioAndVacinaGateway;
+        this.findConfirmedByUsuarioAndDifferentVacinaGateway = findConfirmedByUsuarioAndDifferentVacinaGateway;
         this.findUsuarioByIdGateway = findUsuarioByIdGateway;
         this.findPostoVacinacaoByIdGateway = findPostoVacinacaoByIdGateway;
         this.agendamentoRequestMapper = agendamentoRequestMapper;
@@ -63,7 +70,15 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
     public Agendamento execute(final AgendamentoRequest request) {
         findConfirmedByUsuarioAndVacinaGateway.find(request.usuarioId(), request.vacinaId())
                 .ifPresent(a -> {
-                    throw AgendamentoAlreayExistsException.of();
+                    throw ofAlreadyExistsByUserAndVacina();
+                });
+
+        findConfirmedByUsuarioAndDifferentVacinaGateway.find(request.usuarioId(), request.vacinaId())
+                .stream()
+                .filter(agendamento -> agendamento.isSameDay(request.dataHoraAgendamento()))
+                .findFirst()
+                .ifPresent(a -> {
+                    throw ofAlreadyExistsBySameDay();
                 });
 
         final var usuario = findUsuarioByIdGateway.find(request.usuarioId())
@@ -89,8 +104,8 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
         findLoteByPostoVacinacaoAndVacinaIdGateway.find(postoVacinacao.getId(), vacina.getId())
                 .ifPresent(postoVacinacao::putLote);
 
-        if (postoVacinacao.isNoContainsStock(vacina.getId())) {
-            throw new CustomValidationException("Posto de Vacinação", "não possui estoque para a vacina");
+        if (postoVacinacao.isNoContainsStock(vacina.getId(), request.dataHoraAgendamento())) {
+            throw new CustomValidationException("Posto de Vacinação", "não possui estoque para a vacina nesta data");
         }
 
         final var agendamento = createAgendamentoGateway.create(agendamentoRequestMapper.toDomain(request));

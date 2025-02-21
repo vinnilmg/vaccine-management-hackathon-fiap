@@ -132,4 +132,9 @@ public class AgendamentoDomain implements Agendamento {
                 break;
         }
     }
+
+    @Override
+    public boolean isSameDay(final LocalDateTime dataAgendamento) {
+        return dataAgendamento.toLocalDate().isEqual(this.dataHoraAgendamento.toLocalDate());
+    }
 }
