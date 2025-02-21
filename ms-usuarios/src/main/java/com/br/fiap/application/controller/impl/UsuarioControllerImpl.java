@@ -61,7 +61,7 @@ public class UsuarioControllerImpl implements UsuarioController {
     }
 
     @Override
-    @GetMapping("/{id}/vacinaId/{idVacina}")
+    @GetMapping("/{id}/movimentacao-vacina/vacina/{idVacina}")
     public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoesVacinByVacinaIdAndUserId(@PathVariable Long id,@PathVariable Long idVacina) {
          List<MovimentacaoVacinaResponse> movimentacaoVacinaResponseList = usuarioService.getAllMovimentacoesVacinByVacinaIdAndUserId(id,idVacina);
          return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaResponseList);

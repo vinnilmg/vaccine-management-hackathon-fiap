@@ -20,10 +20,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService {
+
     private final MovimentacaoVacinaRepository movimentacaoVacinaRepository;
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
-    private final UsuarioService usuarioService;
     private final MovimentacaoVacinaMapper movimentacaoVacinaMapper;
 
     @Override
