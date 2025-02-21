@@ -1,6 +1,5 @@
 package com.fiap.hackathon.ms_postos_vacina.repository.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -39,6 +38,7 @@ public class EnderecoEntity {
     @NotBlank
     private String cep;
 
-    @OneToOne(mappedBy = "endereco")
+    @OneToOne
+    @JoinColumn(name = "posto_id", nullable = false)
     private PostoEntity posto;
 }

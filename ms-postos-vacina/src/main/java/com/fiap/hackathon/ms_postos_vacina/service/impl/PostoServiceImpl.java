@@ -9,6 +9,7 @@ import com.fiap.hackathon.ms_postos_vacina.repository.EnderecoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.FuncionamentoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.PostoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.EnderecoEntity;
+import com.fiap.hackathon.ms_postos_vacina.repository.entity.FuncionamentoEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.PostoEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.EnderecoMapper;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.FuncionamentoMapper;
@@ -68,9 +69,8 @@ public class PostoServiceImpl implements PostoService {
         EnderecoEntity endereco = enderecoMapper.toEndereco(request.endereco());
         PostoEntity posto = postoMapper.toPosto(request);
 
-        // TODO: Alterar para que o endereço que tenha o ID do posto e nao ao contrário
-        // TODO: O endereço que depende do cadastro do posto e não ao contrário
         posto.setEndereco(endereco);
+        endereco.setPosto(posto);
         posto.getFuncionamento().forEach(f -> f.setPosto(posto));
 
         PostoEntity postoSaved = postoRepository.save(posto);
@@ -79,11 +79,15 @@ public class PostoServiceImpl implements PostoService {
 
     @Override
     public PostoResponse atualizaPosto(Long id, PostoUpdateRequest postoUpdateRequest) {
-        var posto = postoRepository.findById(id)
+        PostoEntity posto = postoRepository.findById(id)
                 .orElseThrow(PostoNotFoundException::new);
+
+        List<FuncionamentoEntity> funcionamento =
+                funcionamentoMapper.toFuncionamentoList(postoUpdateRequest.funcionamentoRequestList());
 
         posto.setNome(postoUpdateRequest.nome());
         posto.setStatus(postoUpdateRequest.statusPostoEnum());
+        posto.setFuncionamento(funcionamento);
         return postoResponseMapper.toPostoResponse(postoRepository.save(posto));
     }
 
