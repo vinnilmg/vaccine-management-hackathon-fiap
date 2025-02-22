@@ -3,15 +3,15 @@ package com.br.fiap.application.service.impl;
 import com.br.fiap.application.dto.request.MovimentacaoVacinaRequest;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
 import com.br.fiap.application.exception.NotFoundException;
+import com.br.fiap.application.exception.ValidationException;
 import com.br.fiap.application.service.MovimentacaoVacinaService;
 import com.br.fiap.application.service.UsuarioService;
 import com.br.fiap.core.entity.MovimentacaoVacinaData;
 import com.br.fiap.core.mapper.MovimentacaoVacinaMapper;
-import com.br.fiap.core.mapper.UsuarioMapper;
 import com.br.fiap.core.model.MovimentacaoVacina;
 import com.br.fiap.core.model.Usuario;
 import com.br.fiap.core.repository.MovimentacaoVacinaRepository;
-import com.br.fiap.core.repository.UsuarioRepository;
+import com.br.fiap.infrasctructure.client.VacinaClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,7 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
     private final MovimentacaoVacinaRepository movimentacaoVacinaRepository;
     private final UsuarioService usuarioService;
     private final MovimentacaoVacinaMapper movimentacaoVacinaMapper;
+    private final VacinaClient vacinaClient;
 
     @Override
     public List<MovimentacaoVacinaResponse> getAllMovimentacoes() {
@@ -61,6 +62,9 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
 
         Usuario usuario = usuarioService.findById(movimentacaoVacinaRequest.getUsuarioId());
 
+        vacinaClient.getVacinaById(movimentacaoVacinaRequest.getVacinaId()).orElseThrow(() -> new ValidationException("vacinaClient",
+                String.format("Vacina ID %s não existe.",movimentacaoVacinaRequest.getVacinaId())));
+
         MovimentacaoVacina movimentacaoVacina = MovimentacaoVacina.builder()
                 .vacinaId(movimentacaoVacinaRequest.getVacinaId())
                 .dataAplicacao(movimentacaoVacinaRequest.getData())
@@ -77,6 +81,9 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
     public MovimentacaoVacinaResponse update(Long id, MovimentacaoVacinaRequest movimentacaoVacinaRequest) {
 
         Usuario usuario = usuarioService.findById(movimentacaoVacinaRequest.getUsuarioId());
+
+        vacinaClient.getVacinaById(movimentacaoVacinaRequest.getVacinaId()).orElseThrow(() -> new ValidationException("vacinaClient",
+                String.format("Vacina ID %s não existe.",movimentacaoVacinaRequest.getVacinaId())));
 
         MovimentacaoVacina movimentacaoVacina = movimentacaoVacinaRepository.findById(id)
                 .map(movimentacaoVacinaMapper::toModel)
