@@ -63,4 +63,11 @@ public class MovimentacaoVacinaControllerImpl implements MovimentacaoVacinaContr
         movimentacaoVacinaService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    @GetMapping("/dependentes/titular/{titularId}")
+    public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacaoVacinaDependentesByUserId(@PathVariable Long titularId) {
+        List<MovimentacaoVacinaResponse> movimentacaoVacinaResponseList = movimentacaoVacinaService.getAllMovimentacaoVacinaDependentesByUserId(titularId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaResponseList);
+    }
 }

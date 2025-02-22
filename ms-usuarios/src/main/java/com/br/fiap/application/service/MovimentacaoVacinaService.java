@@ -20,5 +20,7 @@ public interface MovimentacaoVacinaService {
 
     MovimentacaoVacinaResponse update(Long id, MovimentacaoVacinaRequest movimentacaoVacinaRequest);
 
+    List<MovimentacaoVacinaResponse> getAllMovimentacaoVacinaDependentesByUserId(Long idUsuario);
+
     void delete(Long id);
 }

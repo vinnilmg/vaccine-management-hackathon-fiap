@@ -2,29 +2,27 @@ application:
   name: ms-usuarios
 
 server:
-  port: 8082  # Porta da aplicação
+  port: 8082
 
 spring:
   datasource:
-    url: jdbc:h2:mem:msusuariosdb  # URL do banco de dados H2 em memória
-    driver-class-name: org.h2.Driver  # Driver do H2
-    username: root  # Usuário padrão do H2
-    password: root  # Senha padrão do H2
-  h2:
-    console:
-      enabled: true  # Habilita o console do H2
-      path: /h2-console  # Caminho para acessar o console do H2
-      settings:
-        trace: false  # Desabilita o trace no console
-        web-allow-others: false  # Impede que outros acessem o console
-
+    url: jdbc:postgresql://localhost:5433/ms_usuarios_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123456
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect  # Dialeto do H2 para o JPA
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update  # Configura o Hibernate para atualizar o schema automaticamente
-    show-sql: true  # Mostra as queries SQL no console
+      ddl-auto: update
+    show-sql: true
+  sql:
+    init:
+      platform: postgresql
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+ms-vacina:
+  host: http://localhost:8081

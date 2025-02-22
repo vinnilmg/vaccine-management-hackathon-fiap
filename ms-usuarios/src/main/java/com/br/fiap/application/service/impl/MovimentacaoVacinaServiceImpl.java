@@ -15,6 +15,7 @@ import com.br.fiap.core.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,8 +23,7 @@ import java.util.List;
 public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService {
 
     private final MovimentacaoVacinaRepository movimentacaoVacinaRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final UsuarioMapper usuarioMapper;
+    private final UsuarioService usuarioService;
     private final MovimentacaoVacinaMapper movimentacaoVacinaMapper;
 
     @Override
@@ -59,15 +59,13 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
     @Override
     public MovimentacaoVacinaResponse create(MovimentacaoVacinaRequest movimentacaoVacinaRequest) {
 
-        Usuario usuario = usuarioRepository.findById(movimentacaoVacinaRequest.usuarioId())
-                .map(usuarioMapper::toModel)
-                .orElseThrow(() -> new NotFoundException(String.format("Usuario com ID %s não encontrado", movimentacaoVacinaRequest.usuarioId())));
+        Usuario usuario = usuarioService.findById(movimentacaoVacinaRequest.getUsuarioId());
 
         MovimentacaoVacina movimentacaoVacina = MovimentacaoVacina.builder()
-                .vacinaId(movimentacaoVacinaRequest.vacinaId())
-                .dataAplicacao(movimentacaoVacinaRequest.data())
+                .vacinaId(movimentacaoVacinaRequest.getVacinaId())
+                .dataAplicacao(movimentacaoVacinaRequest.getData())
                 .usuario(usuario)
-                .localId(movimentacaoVacinaRequest.localId())
+                .localId(movimentacaoVacinaRequest.getLocalId())
                 .build();
 
         MovimentacaoVacinaData movimentacaoVacinaData = movimentacaoVacinaRepository.save(movimentacaoVacinaMapper.toData(movimentacaoVacina));
@@ -78,23 +76,32 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
     @Override
     public MovimentacaoVacinaResponse update(Long id, MovimentacaoVacinaRequest movimentacaoVacinaRequest) {
 
-        Usuario usuario = usuarioRepository.findById(movimentacaoVacinaRequest.usuarioId())
-                .map(usuarioMapper::toModel)
-                .orElseThrow(() -> new NotFoundException(String.format("Usuario com ID %s não encontrado", movimentacaoVacinaRequest.usuarioId())));
-
+        Usuario usuario = usuarioService.findById(movimentacaoVacinaRequest.getUsuarioId());
 
         MovimentacaoVacina movimentacaoVacina = movimentacaoVacinaRepository.findById(id)
                 .map(movimentacaoVacinaMapper::toModel)
                 .orElseThrow(() -> new NotFoundException(String.format("Movimentação Vacina com o ID %s não encontrada", id)));
 
-        movimentacaoVacina.setVacinaId(movimentacaoVacinaRequest.vacinaId());
-        movimentacaoVacina.setDataAplicacao(movimentacaoVacinaRequest.data());
-        movimentacaoVacina.setLocalId(movimentacaoVacinaRequest.localId());
+        movimentacaoVacina.setVacinaId(movimentacaoVacinaRequest.getVacinaId());
+        movimentacaoVacina.setDataAplicacao(movimentacaoVacinaRequest.getData());
+        movimentacaoVacina.setLocalId(movimentacaoVacinaRequest.getLocalId());
         movimentacaoVacina.setUsuario(usuario);
 
         MovimentacaoVacinaData movimentacaoVacinaData = movimentacaoVacinaRepository.save(movimentacaoVacinaMapper.toData(movimentacaoVacina));
 
         return movimentacaoVacinaMapper.toResponse(movimentacaoVacinaData);
+    }
+
+    @Override
+    public List<MovimentacaoVacinaResponse> getAllMovimentacaoVacinaDependentesByUserId(Long idUsuario) {
+        Usuario usuario = usuarioService.findById(idUsuario);
+        return movimentacaoVacinaRepository.findAllByUsuarioId(usuario.getDependentesList().stream()
+                        .map(Usuario::getId)
+                        .toList())
+                .stream()
+                .map(movimentacaoVacinaMapper::toResponse)
+                .sorted(Comparator.comparing(MovimentacaoVacinaResponse::getUsuarioId))
+                .toList();
     }
 
     @Override

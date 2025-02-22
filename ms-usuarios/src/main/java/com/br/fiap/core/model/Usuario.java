@@ -1,5 +1,7 @@
 package com.br.fiap.core.model;
 
+import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.exception.ValidationException;
 import com.br.fiap.core.entity.EnderecoData;
 import com.br.fiap.core.enums.TipoPacienteEnum;
 import lombok.AllArgsConstructor;
@@ -43,4 +45,18 @@ public class Usuario {
     private List<Usuario> dependentesList;
 
     private List<MovimentacaoVacina> movimentacaoVacinal;
+
+    public boolean checkIfUserHasDependente() {
+        return !dependentesList.isEmpty();
+    }
+
+    public Usuario updateUserFrom(UsuarioRequest usuarioRequest) {
+        this.setNome(usuarioRequest.getNome());
+        this.setCpf(usuarioRequest.getCpf());
+        this.setEmail(usuarioRequest.getEmail());
+        this.setDataNascimento(usuarioRequest.getDataNascimento());
+        this.setTipo(usuarioRequest.getTipo());
+        this.setNumeroCarteirinhaSUS(usuarioRequest.getNumeroCarteirinhaSUS());
+        return this;
+    }
 }

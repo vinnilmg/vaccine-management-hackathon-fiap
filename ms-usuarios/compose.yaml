@@ -1,10 +1,35 @@
+version: '3.8'
+
 services:
+  postgres-ms-usuarios:
+    image: postgres:latest
+    restart: always
+    container_name: postgres-ms-usuarios
+    networks:
+      - ms-usuarios-network
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ms_usuarios_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+
   ms-usuarios:
     build: .
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:mem:msusuariosdb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-ms-usuarios:5432/ms_usuarios_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - postgres-ms-usuarios
+    networks:
+      - ms-usuarios-network
+
+networks:
+  ms-usuarios-network:
+    driver: bridge

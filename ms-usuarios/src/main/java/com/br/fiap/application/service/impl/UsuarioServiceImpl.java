@@ -1,31 +1,31 @@
 package com.br.fiap.application.service.impl;
 
+import com.br.fiap.application.dto.request.EnderecoRequest;
+import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.dto.response.DependenteResponse;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
 import com.br.fiap.application.dto.response.UsuarioResponse;
+import com.br.fiap.application.exception.NotFoundException;
+import com.br.fiap.application.exception.ValidationException;
+import com.br.fiap.application.mapper.DependenteMapper;
 import com.br.fiap.application.service.EnderecoService;
-import com.br.fiap.application.service.MovimentacaoVacinaService;
-import com.br.fiap.core.entity.EnderecoData;
+import com.br.fiap.application.service.UsuarioService;
+import com.br.fiap.application.utils.DataUtils;
+import com.br.fiap.core.entity.UsuarioData;
 import com.br.fiap.core.enums.TipoPacienteEnum;
 import com.br.fiap.core.mapper.EnderecoMapper;
 import com.br.fiap.core.mapper.MovimentacaoVacinaMapper;
 import com.br.fiap.core.mapper.UsuarioMapper;
-import com.br.fiap.application.dto.request.UsuarioRequest;
-import com.br.fiap.application.exception.NotFoundException;
-import com.br.fiap.application.exception.ValidationException;
-import com.br.fiap.application.service.UsuarioService;
-import com.br.fiap.application.utils.DataUtils;
-import com.br.fiap.core.entity.UsuarioData;
+import com.br.fiap.core.model.Endereco;
 import com.br.fiap.core.model.Usuario;
 import com.br.fiap.core.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.ErrorResponseException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +39,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final MovimentacaoVacinaMapper movimentacaoVacinaMapper;
 
+    private final DependenteMapper dependenteMapper;
+
     private final EnderecoMapper enderecoMapper;
 
     @Override
@@ -50,11 +52,19 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public List<MovimentacaoVacinaResponse> getAllMovimentacoesVacinByVacinaIdAndUserId(Long id, Long vacinaId) {
-        Usuario usuario =   findById(id);
-
+        Usuario usuario = findById(id);
         return usuario.getMovimentacaoVacinal().stream()
                 .filter(movimentacao -> movimentacao.getVacinaId().equals(vacinaId))
                 .map(movimentacaoVacinaMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public List<DependenteResponse> getAllDependentesByUserId(Long userId) {
+        return findById(userId)
+                .getDependentesList()
+                .stream()
+                .map(dependenteMapper::toResponse)
                 .toList();
     }
 
@@ -74,76 +84,100 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public UsuarioResponse create(UsuarioRequest usuarioRequest) {
-        UsuarioData usuarioData = getUsuarioDataByTipoPessoa(usuarioRequest);
-        usuarioData = usuarioRepository.save(usuarioData);
+        Usuario usuario = getUsuarioDataByTipoPessoa(usuarioRequest);
+        var usuarioData = usuarioRepository.save(usuarioMapper.toData(usuario));
         return usuarioMapper.toResponse(usuarioData);
     }
 
-    public UsuarioData getUsuarioDataByTipoPessoa(UsuarioRequest usuarioRequest) {
+    public Usuario getUsuarioDataByTipoPessoa(UsuarioRequest usuarioRequest) {
 
-        EnderecoData enderecoData = enderecoMapper.toData(enderecoService.create(usuarioRequest.endereco()));
+        Endereco enderecoToSave = enderecoService.create(usuarioRequest.getEndereco());
 
-        if (Objects.nonNull(usuarioRequest.dependenteDeId()) && usuarioRequest.tipo().equals(TipoPacienteEnum.DEPENDENTE)) {
-            validateUserTitularAge(usuarioRequest.dependenteDeId());
+        validateUserTitularAge(usuarioRequest.getDependenteDeId(),usuarioRequest);
 
-            UsuarioData titular = usuarioRepository.findById(usuarioRequest.dependenteDeId())
-                    .orElseThrow(() -> new NotFoundException(String.format("Titular com ID %s não encontrado", usuarioRequest.dependenteDeId())));
+        Optional<Usuario> titular = Objects.nonNull(usuarioRequest.getDependenteDeId()) ? Optional.of(findById(usuarioRequest.getDependenteDeId()))
+                : Optional.empty();
 
-            return UsuarioData.builder()
-                    .cpf(usuarioRequest.cpf())
-                    .nome(usuarioRequest.nome())
-                    .telefone(usuarioRequest.telefone())
-                    .email(usuarioRequest.email())
-                    .dataNascimento(usuarioRequest.dataNascimento())
-                    .tipo(usuarioRequest.tipo())
-                    .numeroCarteirinhaSUS(usuarioRequest.numeroCarteirinhaSUS())
-                    .endereco(enderecoData)
-                    .dependenteDe(titular)
-                    .build();
+       return usuarioRequest.getTipo().createModel(enderecoToSave,titular,usuarioRequest);
 
-        } else if (Objects.isNull(usuarioRequest.dependenteDeId()) && usuarioRequest.tipo().equals(TipoPacienteEnum.TITULAR)) {
-
-            return UsuarioData.builder()
-                    .cpf(usuarioRequest.cpf())
-                    .nome(usuarioRequest.nome())
-                    .telefone(usuarioRequest.telefone())
-                    .email(usuarioRequest.email())
-                    .dataNascimento(usuarioRequest.dataNascimento())
-                    .tipo(usuarioRequest.tipo())
-                    .numeroCarteirinhaSUS(usuarioRequest.numeroCarteirinhaSUS())
-                    .endereco(enderecoData)
-                    .build();
-
-        } else if (Objects.isNull(usuarioRequest.dependenteDeId()) && usuarioRequest.tipo().equals(TipoPacienteEnum.DEPENDENTE)) {
-            throw new ValidationException("dependenteDe", String.format("Tipo de usuário é %s e seu campo o seu titular está nulo", TipoPacienteEnum.DEPENDENTE));
-        }
-        throw new ErrorResponseException(HttpStatusCode.valueOf(500));
     }
 
-
     @Override
-    public UsuarioResponse update(Long id, UsuarioRequest usuarioModel) {
-        UsuarioData usuarioData = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        usuarioData.setCpf(usuarioModel.cpf());
-        usuarioData.setEmail(usuarioModel.email());
-        usuarioData.setDataNascimento(usuarioModel.dataNascimento());
-        usuarioData.setTipo(usuarioModel.tipo());
-        usuarioData.setNumeroCarteirinhaSUS(usuarioModel.numeroCarteirinhaSUS());
-        UsuarioData updatedUsuario = usuarioRepository.save(usuarioData);
+    @Transactional
+    public UsuarioResponse update(Long id, UsuarioRequest usuarioRequest) {
+        Usuario usuario = findById(id);
+
+        if(Objects.isNull(usuarioRequest)) {
+            throw new ValidationException("UserRequest","UserRequest está nulo.");
+        }
+
+        usuario = usuario.updateUserFrom(usuarioRequest);
+        setEnderecoForUser(usuario, usuarioRequest.getEndereco());
+        setDependentesIsTitular(usuario,usuarioRequest);
+        setDependentesDeIsDependente(usuario,usuarioRequest);
+
+        UsuarioData updatedUsuario = usuarioRepository.save(usuarioMapper.toData(usuario));
         return usuarioMapper.toResponse(updatedUsuario);
     }
 
+    public void setEnderecoForUser(Usuario usuario, EnderecoRequest enderecoRequest) {
+        if (Objects.nonNull(enderecoRequest)) {
+            Endereco endereco = enderecoService.create(enderecoRequest);
+            enderecoService.delete(usuario.getEndereco().getId());
+            usuario.setEndereco(endereco);
+        }
+    }
+
+    public void setDependentesIsTitular(Usuario usuario, UsuarioRequest usuarioRequest) {
+        if(usuario.getTipo().equals(TipoPacienteEnum.TITULAR) && Objects.nonNull(usuarioRequest.getDependentesIds())) {
+            List<Usuario> usuariosDependentes = usuarioRequest.getDependentesIds()
+                    .stream()
+                    .map(this::findById)
+                    .toList();
+
+            checkIfHasTitularFromDependentes(usuariosDependentes);
+            usuario.setDependentesList(usuariosDependentes);
+        }
+   }
+
+    public void setDependentesDeIsDependente(Usuario usuario, UsuarioRequest usuarioRequest) {
+        if(usuario.getTipo().equals(TipoPacienteEnum.DEPENDENTE) ){
+            Usuario dependenteDe = findById(usuarioRequest.getDependenteDeId());
+            usuario.setDependenteDe(dependenteDe);
+        }
+    }
+
+private void checkIfHasTitularFromDependentes(List<Usuario> dependentesList) {
+    Optional<Usuario> titularFilter = dependentesList.stream()
+            .filter(usuarioFilter -> usuarioFilter.getTipo().equals(TipoPacienteEnum.TITULAR))
+            .findAny();
+    titularFilter.ifPresent(titular -> {
+        throw new ValidationException("dependentesList", "Existe titular na lista de dependentes");
+    });
+}
+
     @Override
-    public void validateUserTitularAge(Long id) {
-        Usuario usuario = findById(id);
-        if (DataUtils.calculateYearBorn(usuario.getDataNascimento()) < 18) {
-            throw new ValidationException("dataNascimento", String.format("Usuário titular ID %s não pode ser cadastrado. nome %s , não tem 18 anos de idade", id, usuario.getNome()));
+    public void validateUserTitularAge(Long id, UsuarioRequest usuarioRequest) {
+        if (usuarioRequest.getTipo().equals(TipoPacienteEnum.DEPENDENTE) && Objects.nonNull(usuarioRequest.getDependenteDeId())) {
+            Usuario usuario = findById(id);
+            if (DataUtils.calculateYearBorn(usuario.getDataNascimento()) < 18) {
+                throw new ValidationException("dataNascimento", String.format("Usuário titular ID %s não pode ser cadastrado. nome %s , não tem 18 anos de idade", id, usuario.getNome()));
+            }
         }
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
+        Usuario usuario = findById(id);
+        validateDependentes(usuario);
+        enderecoService.delete(usuario.getEndereco().getId());
         usuarioRepository.deleteById(id);
+    }
+
+    private void validateDependentes(Usuario usuario) {
+        if (usuario.checkIfUserHasDependente()) {
+            throw new ValidationException("dependentesList", String.format("User %s contém dependentes, por isso não pode ser deletado!", usuario.getId()));
+        }
     }
 }
