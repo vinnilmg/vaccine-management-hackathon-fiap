@@ -1,6 +1,6 @@
 package com.fiap.hackathon.agendamento.config.error;
 
-import com.fiap.hackathon.agendamento.domain.exceptions.AgendamentoAlreayExistsException;
+import com.fiap.hackathon.agendamento.domain.exceptions.AgendamentoAlreadyExistsException;
 import com.fiap.hackathon.agendamento.domain.exceptions.CustomValidationException;
 import com.fiap.hackathon.agendamento.domain.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler({
             CustomValidationException.class,
             NullPointerException.class,
-            AgendamentoAlreayExistsException.class,
+            AgendamentoAlreadyExistsException.class,
     })
     public ResponseEntity<ApiErrorResponse> handleValidationError(final Exception e) {
         return ResponseEntity

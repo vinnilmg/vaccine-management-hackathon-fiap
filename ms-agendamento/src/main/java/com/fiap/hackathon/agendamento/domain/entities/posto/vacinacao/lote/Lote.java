@@ -16,4 +16,8 @@ public interface Lote {
     Integer getEstoque();
 
     boolean containsEstoque();
+
+    boolean isExpired(LocalDate dataAgendamento);
+
+    boolean isNoExpired(LocalDate dataAgendamento);
 }

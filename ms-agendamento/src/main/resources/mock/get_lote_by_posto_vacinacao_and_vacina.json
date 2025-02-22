@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/postos/1/lotes/2"
+    "url": "/postos/1/vacinas/2/lote"
   },
   "response": {
     "status": 200,

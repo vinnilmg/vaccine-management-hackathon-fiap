@@ -89,18 +89,18 @@ public class PostoVacinacaoComLotesDomain implements PostoVacinacaoComLotes {
     }
 
     @Override
-    public boolean isContainsStock(final Long vacinaId) {
+    public boolean isContainsStock(final Long vacinaId, final LocalDateTime dataAgendamento) {
         if (lotes.isEmpty()) return false;
 
         return lotes.stream()
                 .filter(lote -> lote.getVacinaId().equals(vacinaId))
-                .map(Lote::containsEstoque)
+                .map(lote -> lote.containsEstoque() && lote.isNoExpired(dataAgendamento.toLocalDate()))
                 .findFirst()
                 .orElse(false);
     }
 
     @Override
-    public boolean isNoContainsStock(final Long vacinaId) {
-        return !isContainsStock(vacinaId);
+    public boolean isNoContainsStock(final Long vacinaId, final LocalDateTime dataAgendamento) {
+        return !isContainsStock(vacinaId, dataAgendamento);
     }
 }
