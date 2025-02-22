@@ -129,7 +129,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public void setDependentesIsTitular(Usuario usuario, UsuarioRequest usuarioRequest) {
-        if(usuario.getTipo().equals(TipoPacienteEnum.TITULAR)) {
+        if(usuario.getTipo().equals(TipoPacienteEnum.TITULAR) && Objects.nonNull(usuarioRequest.getDependentesIds())) {
             List<Usuario> usuariosDependentes = usuarioRequest.getDependentesIds()
                     .stream()
                     .map(this::findById)
@@ -141,7 +141,7 @@ public class UsuarioServiceImpl implements UsuarioService {
    }
 
     public void setDependentesDeIsDependente(Usuario usuario, UsuarioRequest usuarioRequest) {
-        if(usuario.getTipo().equals(TipoPacienteEnum.DEPENDENTE)) {
+        if(usuario.getTipo().equals(TipoPacienteEnum.DEPENDENTE) ){
             Usuario dependenteDe = findById(usuarioRequest.getDependenteDeId());
             usuario.setDependenteDe(dependenteDe);
         }

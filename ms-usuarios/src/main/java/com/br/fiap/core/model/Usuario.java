@@ -51,6 +51,7 @@ public class Usuario {
     }
 
     public Usuario updateUserFrom(UsuarioRequest usuarioRequest) {
+        this.setNome(usuarioRequest.getNome());
         this.setCpf(usuarioRequest.getCpf());
         this.setEmail(usuarioRequest.getEmail());
         this.setDataNascimento(usuarioRequest.getDataNascimento());
