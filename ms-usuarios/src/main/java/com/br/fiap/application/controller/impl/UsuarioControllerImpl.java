@@ -2,6 +2,7 @@ package com.br.fiap.application.controller.impl;
 
 import com.br.fiap.application.controller.UsuarioController;
 import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.dto.response.DependenteResponse;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
 import com.br.fiap.application.dto.response.UsuarioResponse;
 import com.br.fiap.application.service.UsuarioService;
@@ -65,6 +66,13 @@ public class UsuarioControllerImpl implements UsuarioController {
     public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoesVacinByVacinaIdAndUserId(@PathVariable Long id,@PathVariable Long idVacina) {
          List<MovimentacaoVacinaResponse> movimentacaoVacinaResponseList = usuarioService.getAllMovimentacoesVacinByVacinaIdAndUserId(id,idVacina);
          return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaResponseList);
+    }
+
+    @Override
+    @GetMapping("/{id}/dependentes")
+    public ResponseEntity<List<DependenteResponse>> getAllDependentesByUsuario(@PathVariable Long id) {
+        List<DependenteResponse> dependenteResponses =  usuarioService.getAllDependentesByUserId(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dependenteResponses);
     }
 
 }

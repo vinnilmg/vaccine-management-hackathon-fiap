@@ -1,18 +1,21 @@
 package com.br.fiap.application.dto.response;
 
 import com.br.fiap.core.enums.TipoPacienteEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class UsuarioResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class DependenteResponse {
+
+    private TipoPacienteEnum tipo;
 
     private String nome;
 
@@ -28,9 +31,4 @@ public class UsuarioResponse {
 
     private String numeroCarteirinhaSUS;
 
-    private TipoPacienteEnum tipo;
-
-    private Long dependenteDeId;
-
-    private List<Long> dependentesListid;
 }

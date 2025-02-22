@@ -74,8 +74,18 @@ public interface MovimentacaoVacinaController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Movimentação de vacina excluída com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Movimentação de vacina não encontrada"),
-            @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
+            @ApiResponse(responseCode = "500", description = "Erro interno")
     })
     ResponseEntity<Void> deleteMovimentacao(Long id);
+
+
+    @Operation(
+            summary = "Listar movimentações de vacina dos dependentes por meio do ID do Titular.",
+            description = "Listagem de movimentações de vacina dos dependentes por meio do ID do Titular."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Movimentações de Vacina do Dependente listada com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro interno")
+    })
+    ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacaoVacinaDependentesByUserId(Long userid);
 }

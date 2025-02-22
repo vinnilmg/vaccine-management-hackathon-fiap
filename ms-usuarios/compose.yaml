@@ -1,3 +1,5 @@
+name: ms-usuarios
+
 services:
   ms-usuarios:
     build: .

@@ -1,4 +1,5 @@
 package com.br.fiap.core.mapper;
+import com.br.fiap.application.dto.request.EnderecoRequest;
 import com.br.fiap.core.entity.EnderecoData;
 import com.br.fiap.core.model.Endereco;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,14 @@ public class EnderecoMapper {
         TypeMap<Endereco, EnderecoData> typeMap = modelMapper.getTypeMap(Endereco.class, EnderecoData.class);
         if (typeMap == null) {
             typeMap = modelMapper.createTypeMap(Endereco.class, EnderecoData.class);
+        }
+        return typeMap.map(endereco);
+    }
+
+    public EnderecoData toData(EnderecoRequest endereco) {
+        TypeMap<EnderecoRequest, EnderecoData> typeMap = modelMapper.getTypeMap(EnderecoRequest.class, EnderecoData.class);
+        if (typeMap == null) {
+            typeMap = modelMapper.createTypeMap(EnderecoRequest.class, EnderecoData.class);
         }
         return typeMap.map(endereco);
     }

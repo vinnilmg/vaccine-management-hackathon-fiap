@@ -1,6 +1,7 @@
 package com.br.fiap.application.controller;
 
 import com.br.fiap.application.dto.request.UsuarioRequest;
+import com.br.fiap.application.dto.response.DependenteResponse;
 import com.br.fiap.application.dto.response.MovimentacaoVacinaResponse;
 import com.br.fiap.application.dto.response.UsuarioResponse;
 import com.br.fiap.core.model.Usuario;
@@ -82,5 +83,18 @@ public interface UsuarioController {
             @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
     })
     ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoesVacinByVacinaIdAndUserId(@PathVariable Long id, @PathVariable Long idVacina);
+
+    @Operation(
+            summary = "Busca todos os Dependentes a partir do Usuario ID",
+            description = "Retorna todas as movimentações referente há vacina e usuário."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "listar dependentes do Usuário"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao processar a requisição")
+    })
+    ResponseEntity<List<DependenteResponse>> getAllDependentesByUsuario(Long id);
+
 
 }

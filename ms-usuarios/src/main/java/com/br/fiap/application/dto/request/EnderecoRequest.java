@@ -1,15 +1,21 @@
 package com.br.fiap.application.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public record EnderecoRequest(
-        Long id,
-        String rua,
-        String numero,
-        String bairro,
-        String complemento,
-        String cidade,
-        String estado,
-        String cep) {
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class EnderecoRequest {
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String complemento;
+    private String cidade;
+    private String estado;
+    private String cep;
+
 }

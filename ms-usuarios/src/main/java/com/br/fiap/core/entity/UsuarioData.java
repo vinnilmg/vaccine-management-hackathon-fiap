@@ -67,9 +67,9 @@ public class UsuarioData {
     @JoinColumn(name = "dependente_id")
     private UsuarioData dependenteDe;
 
-    @OneToMany(mappedBy = "dependenteDe", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "dependenteDe", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private List<UsuarioData> dependentesList;
 
-    @OneToMany(mappedBy = "usuario",cascade = CascadeType.PERSIST ,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
     private List<MovimentacaoVacinaData> movimentacaoVacinal;
 }
