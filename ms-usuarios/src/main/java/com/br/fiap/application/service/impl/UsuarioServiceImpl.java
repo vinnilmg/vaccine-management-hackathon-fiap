@@ -85,8 +85,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public UsuarioResponse create(UsuarioRequest usuarioRequest) {
         Usuario usuario = getUsuarioDataByTipoPessoa(usuarioRequest);
+
+        validateMaxDependentes(usuario);
         var usuarioData = usuarioRepository.save(usuarioMapper.toData(usuario));
         return usuarioMapper.toResponse(usuarioData);
+    }
+
+    public void validateMaxDependentes(Usuario usuario) {
+        if(usuario.isMaxDependentes()) {
+            throw new ValidationException("Quantidade Dependentes","Quantidade de dependentes excede o limite");
+        }
     }
 
     public Usuario getUsuarioDataByTipoPessoa(UsuarioRequest usuarioRequest) {
@@ -134,7 +142,9 @@ public class UsuarioServiceImpl implements UsuarioService {
                     .stream()
                     .map(this::findById)
                     .toList();
-
+            if(usuariosDependentes.size()>=10){
+                throw new ValidationException("Quantidade Dependentes","Quantidade de dependentes excede o limite");
+            }
             checkIfHasTitularFromDependentes(usuariosDependentes);
             usuario.setDependentesList(usuariosDependentes);
         }
