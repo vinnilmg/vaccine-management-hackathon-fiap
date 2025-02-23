@@ -17,7 +17,7 @@ public class DeleteVacinaUseCaseImpl implements DeleteVacinaUseCase {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         vacinaGateway.deleteVacina(id);
     }
 }

@@ -1,11 +1,8 @@
 package com.fiap.hackaton.msvacina.domain.entities;
 
-import java.util.List;
-import java.util.UUID;
-
 public class VacinaDomain implements Vacina{
 
-    private UUID id;
+    private Long id;
     private String nome;
     private String fabricante;
     private String tipo;
@@ -18,11 +15,11 @@ public class VacinaDomain implements Vacina{
     private String efeitosColaterais;
 
     @Override
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

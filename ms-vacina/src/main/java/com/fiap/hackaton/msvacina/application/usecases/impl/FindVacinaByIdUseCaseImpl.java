@@ -17,7 +17,7 @@ public class FindVacinaByIdUseCaseImpl  implements FindVacinaByIdUseCase {
     }
 
     @Override
-    public Optional<VacinaDomain> findById(UUID id) {
+    public Optional<VacinaDomain> findById(Long id) {
         return vacinaGateway.findVacinaById(id);
     }
 }

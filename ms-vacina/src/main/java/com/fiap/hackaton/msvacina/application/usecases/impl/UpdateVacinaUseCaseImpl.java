@@ -4,6 +4,7 @@ import com.fiap.hackaton.msvacina.application.gateway.VacinaGateway;
 import com.fiap.hackaton.msvacina.application.usecases.FindVacinaByIdUseCase;
 import com.fiap.hackaton.msvacina.application.usecases.UpdateVacinaUseCase;
 import com.fiap.hackaton.msvacina.domain.entities.Vacina;
+import com.fiap.hackaton.msvacina.domain.entities.VacinaDomain;
 
 public class UpdateVacinaUseCaseImpl implements UpdateVacinaUseCase {
 
@@ -16,7 +17,7 @@ public class UpdateVacinaUseCaseImpl implements UpdateVacinaUseCase {
     }
 
     @Override
-    public Vacina update(Long id, Vacina vacina) {
-        return null;
+    public void update(Long id, VacinaDomain vacinaDomain) {
+       vacinaGateway.updateVacina(id, vacinaDomain);
     }
 }

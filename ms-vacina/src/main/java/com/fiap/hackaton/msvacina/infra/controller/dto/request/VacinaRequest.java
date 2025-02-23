@@ -1,9 +1,8 @@
 package com.fiap.hackaton.msvacina.infra.controller.dto.request;
 
-import java.util.UUID;
 
 public class VacinaRequest {
-    private UUID id;
+    private Long id;
     private String nome;
     private String fabricante;
     private String tipo;
@@ -31,11 +30,11 @@ public class VacinaRequest {
         this.efeitosColaterais = efeitosColaterais;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

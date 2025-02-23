@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class VacinaResponse {
 
-    private UUID id;
+    private Long id;
     private String nome;
     private String fabricante;
     private String tipo;
@@ -19,7 +19,7 @@ public class VacinaResponse {
     public VacinaResponse() {
     }
 
-    public VacinaResponse(UUID id, String nome, String fabricante, String tipo, String doencasPrevinidas, int numeroDoses, int intervaloDoses, int idadeMinima, int idadeMaxima, String contraIndicacoes, String efeitosColaterais) {
+    public VacinaResponse(Long id, String nome, String fabricante, String tipo, String doencasPrevinidas, int numeroDoses, int intervaloDoses, int idadeMinima, int idadeMaxima, String contraIndicacoes, String efeitosColaterais) {
         this.id = id;
         this.nome = nome;
         this.fabricante = fabricante;
@@ -33,11 +33,11 @@ public class VacinaResponse {
         this.efeitosColaterais = efeitosColaterais;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -8,5 +8,5 @@ import java.util.UUID;
 @FunctionalInterface
 public interface FindVacinaByIdUseCase {
 
-    Optional<VacinaDomain> findById(UUID id);
+    Optional<VacinaDomain> findById(Long id);
 }

@@ -14,9 +14,9 @@ public interface VacinaGateway {
 
     List<VacinaDomain> findAllVacinas();
 
-    Optional<VacinaDomain> findVacinaById(UUID id);
+    Optional<VacinaDomain> findVacinaById(Long id);
 
-    void updateVacina(UUID id, VacinaDomain vacinaDomain);
+    void updateVacina(Long id, VacinaDomain vacinaDomain);
 
-    void deleteVacina(UUID id);
+    void deleteVacina(Long id);
 }

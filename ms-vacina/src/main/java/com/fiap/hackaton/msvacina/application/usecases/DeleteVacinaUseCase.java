@@ -5,5 +5,5 @@ import java.util.UUID;
 @FunctionalInterface
 public interface DeleteVacinaUseCase {
 
-    void delete(UUID id);
+    void delete(Long id);
 }

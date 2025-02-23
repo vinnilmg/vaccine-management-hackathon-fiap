@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface Vacina {
 
-    UUID getId();
+    Long getId();
     String getNome();
     String getFabricante();
     String getTipo();

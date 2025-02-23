@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/vacina")
@@ -38,7 +37,7 @@ public class VacinaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VacinaResponse> findVacinaById(@PathVariable UUID id) {
+    public ResponseEntity<VacinaResponse> findVacinaById(@PathVariable Long id) {
         final var request = findVacinaByIdUseCase.findById(id);
         return ResponseEntity.status(200).body(modelMapper.map(request, VacinaResponse.class));
     }
@@ -51,12 +50,14 @@ public class VacinaController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteVacina(@PathVariable UUID id) {
+    public void deleteVacina(@PathVariable Long id) {
         deleteVacinaUseCase.delete(id);
     }
 
     @PutMapping("/{id}")
-    public VacinaResponse updateVacina(@PathVariable Long id, @RequestBody VacinaRequest vacinaRequest) {
-        return null;
+    public ResponseEntity<VacinaResponse> updateVacina(@PathVariable Long id, @RequestBody VacinaRequest vacinaRequest) {
+        var request = modelMapper.map(vacinaRequest, VacinaDomain.class);
+        updateVacinaUseCase.update(id, request);
+        return ResponseEntity.status(200).body(modelMapper.map(request, VacinaResponse.class));
     }
 }

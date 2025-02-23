@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class VacinaRepositoryGateway implements VacinaGateway {
@@ -37,17 +36,18 @@ public class VacinaRepositoryGateway implements VacinaGateway {
     }
 
     @Override
-    public Optional<VacinaDomain> findVacinaById(UUID id) {
+    public Optional<VacinaDomain> findVacinaById(Long id) {
         final var vacina = vacinaRepository.findById(id);
         return vacina.map(entity -> modelMapper.map(entity, VacinaDomain.class));
     }
 
     @Override
-    public void updateVacina(UUID id, VacinaDomain vacinaDomain) {
+    public void updateVacina(Long id, VacinaDomain vacinaDomain) {
+        vacinaRepository.save(modelMapper.map(vacinaDomain, VacinaEntity.class));
     }
 
     @Override
-    public void deleteVacina(UUID id) {
+    public void deleteVacina(Long id) {
         vacinaRepository.deleteById(id);
     }
 }

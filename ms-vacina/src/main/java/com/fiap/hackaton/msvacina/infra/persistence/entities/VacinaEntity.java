@@ -9,8 +9,8 @@ import java.util.UUID;
 public class VacinaEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID", strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nome;
 
@@ -32,11 +32,11 @@ public class VacinaEntity {
 
     private String efeitosColaterais;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
