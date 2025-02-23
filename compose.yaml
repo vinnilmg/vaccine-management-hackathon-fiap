@@ -55,6 +55,31 @@ services:
       SPRING_DATASOURCE_PASSWORD: 123456
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
 
+  ms-vacina-api:
+    image: ms-vacina:latest
+    build: ./ms-vacina
+    networks:
+      - vaccine-management-network
+    depends_on:
+      - ms-vacina-db
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ms-vacina-db:5432/vacina_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+  ms-vacina-db:
+    image: postgres:latest
+    restart: always
+    networks:
+      - vaccine-management-network
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: vacina_db
+    ports:
+      - "5432:5432"
+
 networks:
   vaccine-management-network:
     driver: bridge
