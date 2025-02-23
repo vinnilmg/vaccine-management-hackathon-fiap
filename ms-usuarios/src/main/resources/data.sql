@@ -2,6 +2,7 @@ INSERT INTO ENDERECO (rua, numero, bairro, complemento, cidade, estado, cep)
 VALUES
 ('Rua das Flores', '123', 'Centro', 'Apto 101', 'São Paulo', 'SP', '01001-000'),
 ('Avenida Brasil', '456', 'Jardim América', 'Casa 2', 'Rio de Janeiro', 'RJ', '20040-000'),
+('Avenida Artyon senna', '1', 'Barra da tijuca', 'Casa 2', 'Rio de Janeiro', 'RJ', '20040-000'),
 ('Rua dos Pinheiros', '789', 'Pinheiros', 'Sala 3', 'São Paulo', 'SP', '05422-000');
 
 INSERT INTO USUARIOS (nome, cpf, email, telefone, endereco_id, data_nascimento, numero_carteirinha_sus, tipo, dependente_de_id)
@@ -49,7 +50,7 @@ VALUES (
     '555.666.777-88',
     'ana.costa@example.com',
     '(21) 6666-5555',
-    (SELECT max(id) FROM ENDERECO WHERE rua = 'Avenida Brasil' AND numero = '456'),
+    (SELECT max(id) FROM ENDERECO WHERE rua = 'Avenida Artyon senna' AND numero = '456'),
     '2008-07-30',
     '555666777888999',
     'DEPENDENTE',
@@ -60,8 +61,8 @@ VALUES (
 
 INSERT INTO MOVIMENTACAO_VACINA (sequence, vacina_id, data_aplicacao, local_id, usuario_id)
 VALUES
-(1, 101, '2023-10-01', 1, (SELECT max(id) FROM USUARIOS ORDER BY RANDOM() LIMIT 1)),
-(2, 101, '2023-10-15', 1, (SELECT max(id) FROM USUARIOS ORDER BY RANDOM() LIMIT 1)),
-(1, 102, '2023-10-05', 2, (SELECT max(id) FROM USUARIOS ORDER BY RANDOM() LIMIT 1)),
-(1, 103, '2023-10-10', 3, (SELECT max(id) FROM USUARIOS ORDER BY RANDOM() LIMIT 1)),
-(1, 104, '2023-10-20', 2, (SELECT max(id) FROM USUARIOS ORDER BY RANDOM() LIMIT 1));
+(1, 101, '2023-10-01', 1, (SELECT max(id) FROM USUARIOS WHERE nome = 'João Silva')),
+(2, 101, '2023-10-15', 1, (SELECT max(id) FROM USUARIOS WHERE nome = 'João Silva')),
+(1, 102, '2023-10-05', 2, (SELECT max(id) FROM USUARIOS WHERE nome =  'Ana Costa')),
+(1, 103, '2023-10-10', 3, (SELECT max(id) FROM USUARIOS WHERE nome = 'Maria Oliveira')),
+(1, 104, '2023-10-20', 2, (SELECT max(id) FROM USUARIOS  WHERE nome = 'João Silva'));
