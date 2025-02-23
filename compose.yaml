@@ -80,6 +80,30 @@ services:
     ports:
       - "5432:5432"
 
+  ms-postos-vacina-db:
+    image: postgres:latest
+    restart: always
+    networks:
+      - vaccine-management-network
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ms_postos-vacina_db
+    ports:
+      - "5432:5432"
+  ms-postos-vacina-api:
+    image: ms-postos-vacina:latest
+    build: ./ms-postos-vacina
+    networks:
+      - vaccine-management-network
+    ports:
+      - "8093:8093"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ms-postos-vacina-db:5432/ms_postos_vacina_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+
+
 networks:
   vaccine-management-network:
     driver: bridge
