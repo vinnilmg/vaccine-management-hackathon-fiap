@@ -27,6 +27,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://ms-agendamento-db:5432/agendamento_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
+      MS_POSTO_HOST: ms-postos-vacina-api:8093
+      MS_USUARIO_HOST: ms-usuarios-api:8082
+      MS_VACINA_HOST: ms-vacina-api:8099
 
   ms-usuarios-db:
     image: postgres:latest
@@ -54,6 +57,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      MS_VACINA_HOST: ms-vacina-api:8099
 
   ms-vacina-api:
     image: ms-vacina:latest
@@ -63,11 +67,12 @@ services:
     depends_on:
       - ms-vacina-db
     ports:
-      - "8090:8090"
+      - "8099:8099"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://ms-vacina-db:5432/vacina_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
+
   ms-vacina-db:
     image: postgres:latest
     restart: always
@@ -78,7 +83,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: vacina_db
     ports:
-      - "5432:5432"
+      - "5434:5432"
 
   ms-postos-vacina-db:
     image: postgres:latest
@@ -88,9 +93,10 @@ services:
     environment:
       POSTGRES_PASSWORD: 123456
       POSTGRES_USER: postgres
-      POSTGRES_DB: ms_postos-vacina_db
+      POSTGRES_DB: postos_vacina_db
     ports:
-      - "5432:5432"
+      - "5435:5432"
+
   ms-postos-vacina-api:
     image: ms-postos-vacina:latest
     build: ./ms-postos-vacina
@@ -99,10 +105,9 @@ services:
     ports:
       - "8093:8093"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://ms-postos-vacina-db:5432/ms_postos_vacina_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ms-postos-vacina-db:5432/postos_vacina_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
-
 
 networks:
   vaccine-management-network:

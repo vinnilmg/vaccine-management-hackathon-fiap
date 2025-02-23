@@ -28,4 +28,4 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 ms-vacina:
-  host: http://localhost:8081
+  host: ${MS_VACINA_HOST:http://localhost:8081}

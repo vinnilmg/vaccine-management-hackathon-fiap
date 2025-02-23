@@ -8,7 +8,7 @@ RUN mvn clean package -Pprd -Dmaven.test.skip
 
 FROM openjdk:17-alpine
 
-COPY --from=build /app/target/app.jar /app.jar
+COPY --from=build /app/target/*.jar /app/app.jar
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 EXPOSE 8083
