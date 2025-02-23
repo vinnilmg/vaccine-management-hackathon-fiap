@@ -64,7 +64,7 @@ public class UsuarioData {
     private TipoPacienteEnum tipo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "dependente_id")
+    @JoinColumn(name = "dependente_de_id")
     private UsuarioData dependenteDe;
 
     @OneToMany(mappedBy = "dependenteDe", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)

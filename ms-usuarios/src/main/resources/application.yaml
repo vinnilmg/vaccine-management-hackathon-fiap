@@ -10,13 +10,13 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 123456
-    jpa:
-     defer-datasource-initialization: true
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
+    defer-datasource-initialization: true
   sql:
     init:
       platform: postgresql

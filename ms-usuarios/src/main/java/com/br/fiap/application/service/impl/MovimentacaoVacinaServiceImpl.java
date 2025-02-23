@@ -12,7 +12,9 @@ import com.br.fiap.core.model.MovimentacaoVacina;
 import com.br.fiap.core.model.Usuario;
 import com.br.fiap.core.repository.MovimentacaoVacinaRepository;
 import com.br.fiap.infrasctructure.client.VacinaClient;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -62,8 +64,9 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
 
         Usuario usuario = usuarioService.findById(movimentacaoVacinaRequest.getUsuarioId());
 
-        vacinaClient.getVacinaById(movimentacaoVacinaRequest.getVacinaId()).orElseThrow(() -> new ValidationException("vacinaClient",
-                String.format("Vacina ID %s não existe.",movimentacaoVacinaRequest.getVacinaId())));
+        compareDataNascimentoWithDataAplicacao(usuario,movimentacaoVacinaRequest);
+
+        validaVacinaExistencia(movimentacaoVacinaRequest);
 
         MovimentacaoVacina movimentacaoVacina = MovimentacaoVacina.builder()
                 .vacinaId(movimentacaoVacinaRequest.getVacinaId())
@@ -77,17 +80,36 @@ public class MovimentacaoVacinaServiceImpl implements MovimentacaoVacinaService 
         return movimentacaoVacinaMapper.toResponse(movimentacaoVacinaData);
     }
 
+    private void validaVacinaExistencia(MovimentacaoVacinaRequest movimentacaoVacinaRequest) {
+        try {
+            vacinaClient.getVacinaById(movimentacaoVacinaRequest.getVacinaId());
+        } catch (FeignException e) {
+            if (e.status() == HttpStatus.NOT_FOUND.value()) {
+                throw new NotFoundException("Vacina não localizada");
+            } else {
+                throw new ValidationException("vacinaClient",
+                        String.format("Vacina Error by vacina id %s ", movimentacaoVacinaRequest.getVacinaId()));
+            }
+        }
+    }
+
+    private void compareDataNascimentoWithDataAplicacao(Usuario usuario, MovimentacaoVacinaRequest movimentacaoVacinaRequest) {
+        if (usuario.getDataNascimento().isAfter(movimentacaoVacinaRequest.getData())) {
+            throw new ValidationException("Data Aplicação","Data de Nascimento do usuário é após a data de aplicação");
+        }
+    }
     @Override
     public MovimentacaoVacinaResponse update(Long id, MovimentacaoVacinaRequest movimentacaoVacinaRequest) {
 
         Usuario usuario = usuarioService.findById(movimentacaoVacinaRequest.getUsuarioId());
 
-        vacinaClient.getVacinaById(movimentacaoVacinaRequest.getVacinaId()).orElseThrow(() -> new ValidationException("vacinaClient",
-                String.format("Vacina ID %s não existe.",movimentacaoVacinaRequest.getVacinaId())));
+        validaVacinaExistencia(movimentacaoVacinaRequest);
 
         MovimentacaoVacina movimentacaoVacina = movimentacaoVacinaRepository.findById(id)
                 .map(movimentacaoVacinaMapper::toModel)
                 .orElseThrow(() -> new NotFoundException(String.format("Movimentação Vacina com o ID %s não encontrada", id)));
+
+        compareDataNascimentoWithDataAplicacao(usuario,movimentacaoVacinaRequest);
 
         movimentacaoVacina.setVacinaId(movimentacaoVacinaRequest.getVacinaId());
         movimentacaoVacina.setDataAplicacao(movimentacaoVacinaRequest.getData());

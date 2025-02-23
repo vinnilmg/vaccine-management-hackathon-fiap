@@ -13,6 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -59,4 +60,14 @@ public class Usuario {
         this.setNumeroCarteirinhaSUS(usuarioRequest.getNumeroCarteirinhaSUS());
         return this;
     }
+
+    public boolean isMaxDependentes() {
+        if (Objects.nonNull(this.dependentesList) && this.tipo.equals(TipoPacienteEnum.TITULAR)) {
+            return dependentesList.size() == 10;
+        } else if(this.tipo.equals(TipoPacienteEnum.DEPENDENTE)) {
+            return dependenteDe.isMaxDependentes();
+        }
+        return false;
+    }
+
 }
