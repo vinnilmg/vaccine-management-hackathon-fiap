@@ -63,7 +63,7 @@ public class Usuario {
 
     public boolean isMaxDependentes() {
         if (Objects.nonNull(this.dependentesList) && this.tipo.equals(TipoPacienteEnum.TITULAR)) {
-            return dependentesList.size() == 10;
+            return dependentesList.size() >= 10;
         } else if(this.tipo.equals(TipoPacienteEnum.DEPENDENTE)) {
             return dependenteDe.isMaxDependentes();
         }
