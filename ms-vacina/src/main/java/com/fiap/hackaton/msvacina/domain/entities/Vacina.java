@@ -5,15 +5,15 @@ import java.util.UUID;
 
 public interface Vacina {
 
-    UUID getId();
+    Long getId();
     String getNome();
     String getFabricante();
     String getTipo();
-    List<String> getDoencasPrevinidas();
+    String getDoencasPrevinidas();
     int getNumeroDoses();
     int getIntervaloDoses();
     int getIdadeMinima();
     int getIdadeMaxima();
     String getContraIndicacoes();
-    List<String> getEfeitosColaterais();
+    String getEfeitosColaterais();
 }

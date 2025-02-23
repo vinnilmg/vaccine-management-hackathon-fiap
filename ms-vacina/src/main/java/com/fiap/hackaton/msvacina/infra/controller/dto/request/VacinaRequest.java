@@ -1,36 +1,34 @@
-package com.fiap.hackaton.msvacina.infra.persistence.entities;
+package com.fiap.hackaton.msvacina.infra.controller.dto.request;
 
-import jakarta.persistence.*;
 
-import java.util.UUID;
-
-@Entity
-@Table(name = "vacinas")
-public class VacinaEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class VacinaRequest {
     private Long id;
-
     private String nome;
-
     private String fabricante;
-
     private String tipo;
-
     private String doencasPrevinidas;
-
     private int numeroDoses;
-
     private int intervaloDoses;
-
     private int idadeMinima;
-
     private int idadeMaxima;
-
     private String contraIndicacoes;
-
     private String efeitosColaterais;
+
+    public VacinaRequest() {
+    }
+
+    public VacinaRequest(String nome, String fabricante, String tipo, String doencasPrevinidas, int numeroDoses, int intervaloDoses, int idadeMinima, int idadeMaxima, String contraIndicacoes, String efeitosColaterais) {
+        this.nome = nome;
+        this.fabricante = fabricante;
+        this.tipo = tipo;
+        this.doencasPrevinidas = doencasPrevinidas;
+        this.numeroDoses = numeroDoses;
+        this.intervaloDoses = intervaloDoses;
+        this.idadeMinima = idadeMinima;
+        this.idadeMaxima = idadeMaxima;
+        this.contraIndicacoes = contraIndicacoes;
+        this.efeitosColaterais = efeitosColaterais;
+    }
 
     public Long getId() {
         return id;

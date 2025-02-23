@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface VacinaRepository extends JpaRepository<VacinaEntity, UUID> {
+public interface VacinaRepository extends JpaRepository<VacinaEntity, Long> {
 }

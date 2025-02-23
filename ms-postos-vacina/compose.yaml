@@ -1,0 +1,21 @@
+name: ms-postos-vacina
+
+services:
+  postgres-ms-postos-vacina:
+    image: postgres:latest
+    restart: always
+    container_name: postgres-ms-postos-vacina
+    networks:
+      - ms-postos-vacina-network
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ms_postos-vacina_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+
+networks:
+  ms-postos-vacina-network:
+    driver: bridge

@@ -1,6 +1,8 @@
 package com.fiap.hackathon.ms_postos_vacina.controller;
 
+import com.fiap.hackathon.ms_postos_vacina.controller.request.LoteRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoRequest;
+import com.fiap.hackathon.ms_postos_vacina.controller.response.LoteResponse;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoUpdateRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.PostoResponse;
 import com.fiap.hackathon.ms_postos_vacina.service.PostoService;
@@ -38,6 +40,33 @@ public class PostoController {
                 .body(postoService.criaPosto(request));
     }
 
+    @PostMapping("/criar-lote")
+    public ResponseEntity<LoteResponse> criaLote(@RequestBody LoteRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postoService.criaLote(request));
+    }
+
+    @PutMapping("/{idPosto}/vacinas/{vacinaid}/lote/aumentar-etoque")
+    public ResponseEntity<Void> aumentarEstoque(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+        postoService.aumentarEstoque(idPosto, vacinaid);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{idPosto}/vacinas/{vacinaid}/lote/diminuir-estoque")
+    public ResponseEntity<Void> diminuirEstoque(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+        postoService.diminuirEstoque(idPosto, vacinaid);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{idPosto}/vacinas/{vacinaid}/lote")
+    public ResponseEntity<LoteResponse> buscaPosto(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+        return ResponseEntity.ok(postoService.buscaPostoLote(idPosto, vacinaid));
+    }
+
+    @GetMapping("/lotes/numero/{idlote}")
+    public ResponseEntity<LoteResponse> buscaNrLote(@PathVariable String idlote) {
+        return ResponseEntity.ok(postoService.buscaNrLote(idlote));
+    }
     @PutMapping("/{id}")
     public ResponseEntity<PostoResponse> atualizaPosto(@PathVariable Long id,
                                                        @RequestBody PostoUpdateRequest request) {
