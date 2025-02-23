@@ -65,14 +65,14 @@ public class UsuarioControllerImpl implements UsuarioController {
     @GetMapping("/{id}/movimentacao-vacina/vacina/{idVacina}")
     public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacoesVacinByVacinaIdAndUserId(@PathVariable Long id,@PathVariable Long idVacina) {
          List<MovimentacaoVacinaResponse> movimentacaoVacinaResponseList = usuarioService.getAllMovimentacoesVacinByVacinaIdAndUserId(id,idVacina);
-         return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaResponseList);
+         return ResponseEntity.status(HttpStatus.OK).body(movimentacaoVacinaResponseList);
     }
 
     @Override
     @GetMapping("/{id}/dependentes")
     public ResponseEntity<List<DependenteResponse>> getAllDependentesByUsuario(@PathVariable Long id) {
         List<DependenteResponse> dependenteResponses =  usuarioService.getAllDependentesByUserId(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dependenteResponses);
+        return ResponseEntity.status(HttpStatus.OK).body(dependenteResponses);
     }
 
 }
