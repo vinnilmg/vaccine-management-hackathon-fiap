@@ -34,13 +34,13 @@ public class MovimentacaoVacinaControllerImpl implements MovimentacaoVacinaContr
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<MovimentacaoVacinaResponse> getMovimentacaoById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaService.getMovimentacaoById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(movimentacaoVacinaService.getMovimentacaoById(id));
     }
 
     @Override
     @GetMapping("/usuario/{id}")
     public ResponseEntity<List<MovimentacaoVacinaResponse>> getMovimentacaoByIdUsuario(@PathVariable Long id) {
-        return  ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaService.getAlltMovimentacaoByUsuarioId(id));
+        return  ResponseEntity.status(HttpStatus.OK).body(movimentacaoVacinaService.getAlltMovimentacaoByUsuarioId(id));
     }
 
     @Override
@@ -68,6 +68,6 @@ public class MovimentacaoVacinaControllerImpl implements MovimentacaoVacinaContr
     @GetMapping("/dependentes/titular/{titularId}")
     public ResponseEntity<List<MovimentacaoVacinaResponse>> getAllMovimentacaoVacinaDependentesByUserId(@PathVariable Long titularId) {
         List<MovimentacaoVacinaResponse> movimentacaoVacinaResponseList = movimentacaoVacinaService.getAllMovimentacaoVacinaDependentesByUserId(titularId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoVacinaResponseList);
+        return ResponseEntity.status(HttpStatus.OK).body(movimentacaoVacinaResponseList);
     }
 }
