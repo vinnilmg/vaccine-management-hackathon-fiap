@@ -5,7 +5,6 @@ import com.fiap.hackathon.agendamento.domain.entities.usuario.historico.Historic
 import com.fiap.hackathon.agendamento.domain.entities.usuario.historico.HistoricoVacinacao;
 import com.fiap.hackathon.agendamento.domain.entities.usuario.historico.HistoricoVacinacaoDomain;
 import com.fiap.hackathon.agendamento.infra.client.response.usuario.historico.HistoricoVacinaResponse;
-import com.fiap.hackathon.agendamento.infra.client.response.usuario.historico.HistoricoVacinacaoResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,9 +23,9 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 )
 public interface HistoricoVacinacaoResponseMapper {
 
-    default HistoricoCompleto toDomain(final HistoricoVacinacaoResponse response) {
-        return nonNull(response) && isNotEmpty(response.historico())
-                ? HistoricoCompletoDomain.of(toDomains(response.historico()))
+    default HistoricoCompleto toDomain(final List<HistoricoVacinaResponse> response) {
+        return nonNull(response) && isNotEmpty(response)
+                ? HistoricoCompletoDomain.of(toDomains(response))
                 : HistoricoCompletoDomain.empty();
     }
 

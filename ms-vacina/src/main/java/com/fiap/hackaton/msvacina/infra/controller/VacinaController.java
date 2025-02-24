@@ -1,12 +1,23 @@
 package com.fiap.hackaton.msvacina.infra.controller;
 
-import com.fiap.hackaton.msvacina.application.usecases.*;
+import com.fiap.hackaton.msvacina.application.usecases.CreateVacinaUseCase;
+import com.fiap.hackaton.msvacina.application.usecases.DeleteVacinaUseCase;
+import com.fiap.hackaton.msvacina.application.usecases.FindAllVacinaUseCase;
+import com.fiap.hackaton.msvacina.application.usecases.FindVacinaByIdUseCase;
+import com.fiap.hackaton.msvacina.application.usecases.UpdateVacinaUseCase;
 import com.fiap.hackaton.msvacina.domain.entities.VacinaDomain;
 import com.fiap.hackaton.msvacina.infra.controller.dto.request.VacinaRequest;
 import com.fiap.hackaton.msvacina.infra.controller.dto.response.VacinaResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -42,7 +53,7 @@ public class VacinaController {
         return ResponseEntity.status(200).body(modelMapper.map(request, VacinaResponse.class));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<VacinaResponse> createVacina(@RequestBody VacinaRequest vacinaRequest) {
         var request = modelMapper.map(vacinaRequest, VacinaDomain.class);
         request = createVacinaUseCase.create(request);
@@ -56,8 +67,12 @@ public class VacinaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<VacinaResponse> updateVacina(@PathVariable Long id, @RequestBody VacinaRequest vacinaRequest) {
-        var request = modelMapper.map(vacinaRequest, VacinaDomain.class);
+        final var request = modelMapper.map(vacinaRequest, VacinaDomain.class);
         updateVacinaUseCase.update(id, request);
-        return ResponseEntity.status(200).body(modelMapper.map(request, VacinaResponse.class));
+
+        final var response = modelMapper.map(request, VacinaResponse.class);
+        response.setId(id);
+
+        return ResponseEntity.status(200).body(response);
     }
 }

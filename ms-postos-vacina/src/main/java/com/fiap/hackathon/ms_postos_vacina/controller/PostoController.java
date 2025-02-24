@@ -46,7 +46,7 @@ public class PostoController {
                 .body(postoService.criaLote(request));
     }
 
-    @PutMapping("/{idPosto}/vacinas/{vacinaid}/lote/aumentar-etoque")
+    @PutMapping("/{idPosto}/vacinas/{vacinaid}/lote/aumentar-estoque")
     public ResponseEntity<Void> aumentarEstoque(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
         postoService.aumentarEstoque(idPosto, vacinaid);
         return ResponseEntity.noContent().build();
@@ -59,7 +59,7 @@ public class PostoController {
     }
 
     @GetMapping("/{idPosto}/vacinas/{vacinaid}/lote")
-    public ResponseEntity<LoteResponse> buscaPosto(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
+    public ResponseEntity<LoteResponse> BuscaLote(@PathVariable Long idPosto, @PathVariable Long vacinaid) {
         return ResponseEntity.ok(postoService.buscaPostoLote(idPosto, vacinaid));
     }
 

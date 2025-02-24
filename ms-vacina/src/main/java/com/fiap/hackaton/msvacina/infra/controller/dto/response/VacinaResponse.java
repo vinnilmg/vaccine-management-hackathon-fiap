@@ -1,7 +1,5 @@
 package com.fiap.hackaton.msvacina.infra.controller.dto.response;
 
-import java.util.UUID;
-
 public class VacinaResponse {
 
     private Long id;

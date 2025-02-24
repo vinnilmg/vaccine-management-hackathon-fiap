@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @Builder
 public class UsuarioResponse {
+    private Long id;
 
     private String nome;
 

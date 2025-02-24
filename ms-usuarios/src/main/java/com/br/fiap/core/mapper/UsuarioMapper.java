@@ -6,11 +6,9 @@ import com.br.fiap.core.enums.TipoPacienteEnum;
 import com.br.fiap.core.model.Usuario;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -25,7 +23,7 @@ public class UsuarioMapper {
         if (typeMap == null) {
             typeMap = modelMapper.createTypeMap(UsuarioData.class, Usuario.class);
         }
-      configureMappings();
+        configureMappings();
         return typeMap.map(usuarioData);
     }
 
@@ -40,7 +38,7 @@ public class UsuarioMapper {
             mapper.map(src -> src.getDependenteDe() != null ? src.getDependenteDe().getId() : null,
                     UsuarioResponse::setDependenteDeId);
 
-            mapper.map(src -> src.getDependentesList()!= null ?
+            mapper.map(src -> src.getDependentesList() != null ?
                             src.getDependentesList().stream().map(Usuario::getId).collect(Collectors.toList())
                             : null,
                     UsuarioResponse::setDependentesListid);
@@ -56,8 +54,9 @@ public class UsuarioMapper {
     }
 
     public UsuarioResponse toResponse(Usuario usuario) {
-        if(usuario.getTipo().equals(TipoPacienteEnum.TITULAR)){
+        if (usuario.getTipo().equals(TipoPacienteEnum.TITULAR)) {
             return UsuarioResponse.builder()
+                    .id(usuario.getId())
                     .nome(usuario.getNome())
                     .cpf(usuario.getCpf())
                     .email(usuario.getEmail())
@@ -66,25 +65,26 @@ public class UsuarioMapper {
                     .dataNascimento(usuario.getDataNascimento())
                     .numeroCarteirinhaSUS(usuario.getNumeroCarteirinhaSUS())
                     .tipo(usuario.getTipo())
-                    .dependentesListid(Objects.nonNull(usuario.getDependentesList()) ?usuario.getDependentesList().stream().map(Usuario::getId).toList() :null)
+                    .dependentesListid(Objects.nonNull(usuario.getDependentesList()) ? usuario.getDependentesList().stream().map(Usuario::getId).toList() : null)
                     .build();
         }
 
-         return UsuarioResponse.builder()
+        return UsuarioResponse.builder()
+                .id(usuario.getId())
                 .nome(usuario.getNome())
                 .cpf(usuario.getCpf())
                 .email(usuario.getEmail())
                 .telefone(usuario.getTelefone())
-                 .enderecoId(usuario.getEndereco().getId())
+                .enderecoId(usuario.getEndereco().getId())
                 .dataNascimento(usuario.getDataNascimento())
                 .numeroCarteirinhaSUS(usuario.getNumeroCarteirinhaSUS())
                 .tipo(usuario.getTipo())
-                 .dependenteDeId(usuario.getDependenteDe() != null ? usuario.getDependenteDe().getId() : null)
+                .dependenteDeId(usuario.getDependenteDe() != null ? usuario.getDependenteDe().getId() : null)
                 .build();
     }
 
     public UsuarioResponse toResponse(UsuarioData usuario) {
-        if(usuario.getTipo().equals(TipoPacienteEnum.TITULAR)){
+        if (usuario.getTipo().equals(TipoPacienteEnum.TITULAR)) {
             return UsuarioResponse.builder()
                     .nome(usuario.getNome())
                     .cpf(usuario.getCpf())
@@ -94,20 +94,20 @@ public class UsuarioMapper {
                     .dataNascimento(usuario.getDataNascimento())
                     .numeroCarteirinhaSUS(usuario.getNumeroCarteirinhaSUS())
                     .tipo(usuario.getTipo())
-                    .dependentesListid(Objects.nonNull(usuario.getDependentesList()) ?usuario.getDependentesList().stream().map(UsuarioData::getId).toList() :null)
+                    .dependentesListid(Objects.nonNull(usuario.getDependentesList()) ? usuario.getDependentesList().stream().map(UsuarioData::getId).toList() : null)
                     .build();
         }
 
-         return UsuarioResponse.builder()
+        return UsuarioResponse.builder()
                 .nome(usuario.getNome())
                 .cpf(usuario.getCpf())
                 .email(usuario.getEmail())
                 .telefone(usuario.getTelefone())
-                 .enderecoId(usuario.getEndereco().getId())
+                .enderecoId(usuario.getEndereco().getId())
                 .dataNascimento(usuario.getDataNascimento())
                 .numeroCarteirinhaSUS(usuario.getNumeroCarteirinhaSUS())
                 .tipo(usuario.getTipo())
-                 .dependenteDeId(usuario.getDependenteDe() != null ? usuario.getDependenteDe().getId() : null)
+                .dependenteDeId(usuario.getDependenteDe() != null ? usuario.getDependenteDe().getId() : null)
                 .build();
     }
 }

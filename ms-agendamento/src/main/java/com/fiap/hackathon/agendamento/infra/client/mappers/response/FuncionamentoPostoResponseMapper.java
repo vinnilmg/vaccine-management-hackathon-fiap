@@ -16,7 +16,7 @@ import org.mapstruct.ReportingPolicy;
 public interface FuncionamentoPostoResponseMapper {
 
     @Mapping(target = "diaSemana", source = "dia")
-    @Mapping(target = "horarioInicio", source = "horario.inicio")
-    @Mapping(target = "horarioFim", source = "horario.termino")
+    @Mapping(target = "horarioInicio", source = "inicio")
+    @Mapping(target = "horarioFim", source = "termino")
     FuncionamentoDomain toDomain(FuncionamentoPostoResponse funcionamentoPostoResponse);
 }
