@@ -86,6 +86,7 @@ public class UsuarioMapper {
     public UsuarioResponse toResponse(UsuarioData usuario) {
         if (usuario.getTipo().equals(TipoPacienteEnum.TITULAR)) {
             return UsuarioResponse.builder()
+                    .id(usuario.getId())
                     .nome(usuario.getNome())
                     .cpf(usuario.getCpf())
                     .email(usuario.getEmail())
@@ -99,6 +100,7 @@ public class UsuarioMapper {
         }
 
         return UsuarioResponse.builder()
+                .id(usuario.getId())
                 .nome(usuario.getNome())
                 .cpf(usuario.getCpf())
                 .email(usuario.getEmail())
