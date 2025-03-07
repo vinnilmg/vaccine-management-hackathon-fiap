@@ -13,6 +13,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface PostoResponseMapper {
+
     @Mapping(target = "endereco", source = "endereco", qualifiedByName = "mapEndereco")
     @Mapping(target = "funcionamento", source = "funcionamento", qualifiedByName = "mapFuncionamento")
     PostoResponse toPostoResponse(PostoEntity posto);

@@ -7,14 +7,18 @@ import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.request.PostoUpdateRequest;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.LoteResponse;
 import com.fiap.hackathon.ms_postos_vacina.controller.response.PostoResponse;
-import com.fiap.hackathon.ms_postos_vacina.exception.*;
+import com.fiap.hackathon.ms_postos_vacina.exception.DataInvalidaException;
+import com.fiap.hackathon.ms_postos_vacina.exception.EstoqueInvalidoException;
+import com.fiap.hackathon.ms_postos_vacina.exception.LoteNotFoundException;
+import com.fiap.hackathon.ms_postos_vacina.exception.PostoNotFoundException;
+import com.fiap.hackathon.ms_postos_vacina.exception.PostoVacinaNotFoundException;
 import com.fiap.hackathon.ms_postos_vacina.repository.EnderecoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.FuncionamentoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.LoteRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.PostoRepository;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.EnderecoEntity;
-import com.fiap.hackathon.ms_postos_vacina.repository.entity.LoteEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.FuncionamentoEntity;
+import com.fiap.hackathon.ms_postos_vacina.repository.entity.LoteEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.entity.PostoEntity;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.EnderecoMapper;
 import com.fiap.hackathon.ms_postos_vacina.repository.mapper.FuncionamentoMapper;
@@ -28,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -110,7 +113,7 @@ public class PostoServiceImpl implements PostoService {
     public LoteResponse criaLote(LoteRequest request) {
         LoteEntity lote = loteMapper.toLote(request);
 
-        if(lote.getEstoque() <= 0){
+        if (lote.getEstoque() <= 0) {
             throw new EstoqueInvalidoException();
         }
 
@@ -128,20 +131,20 @@ public class PostoServiceImpl implements PostoService {
     @Override
     public void aumentarEstoque(Long idPosto, Long vacinaId) {
         var loteOp = loteRepository.findByPostoVacinacaoIdAndVacinaId(idPosto, vacinaId);
-        if(loteOp.isEmpty()) throw new PostoVacinaNotFoundException();
+        if (loteOp.isEmpty()) throw new PostoVacinaNotFoundException();
 
         var lote = loteOp.get();
-        lote.setEstoque(lote.getEstoque() + 1) ;
+        lote.setEstoque(lote.getEstoque() + 1);
         loteRepository.save(lote);
     }
 
     @Override
     public void diminuirEstoque(Long idPosto, Long vacinaId) {
         var loteOp = loteRepository.findByPostoVacinacaoIdAndVacinaId(idPosto, vacinaId);
-        if(loteOp.isEmpty()) throw new PostoVacinaNotFoundException();
+        if (loteOp.isEmpty()) throw new PostoVacinaNotFoundException();
 
         var lote = loteOp.get();
-        lote.setEstoque(lote.getEstoque() - 1) ;
+        lote.setEstoque(lote.getEstoque() - 1);
         loteRepository.save(lote);
     }
 

@@ -27,7 +27,11 @@ VALUES ('SEGUNDA', '07:00', '16:00', 1),
        ('TERCA', '08:00', '17:00', 5);
 
 INSERT INTO endereco (rua, numero, complemento, bairro, cidade, estado, cep, posto_id)
-VALUES ('Rua Hortência Pedro', '200', null, 'Jardim Vaz de Lima', 'São Paulo', 'SP', '05833140', 1);
+VALUES  ('Rua Hortência Pedro', '200', null, 'Jardim Vaz de Lima', 'São Paulo', 'SP', '05833140', 1),
+        ('Rua São José', '15', 'Casa 5', 'Vila Mariana', 'São Paulo', 'SP', '05533149', 2),
+        ('Avenida Brasil', '1500', null, 'Jardim dos Reis', 'São Paulo', 'SP', '02835140', 3),
+        ('Rua dos Janeiros', '1', 'Sala 5', 'Vila dos Testes', 'São Paulo', 'SP', '05835148', 4),
+        ('Avenida Paulista', '2015', 'Sala 15', 'Centro', 'São Paulo', 'SP', '01111140', 5);
 
 INSERT INTO lote (numero, posto_vacinacao_id, vacina_id, validade, estoque)
 VALUES  ('1111', 2, 2, '2026-03-05', 20),
